@@ -114,8 +114,32 @@
                  "type":"",
                  "visible":true,
                  "width":0,
-                 "x":1616,
-                 "y":32.6666
+                 "x":1616.33333333333,
+                 "y":84.3332666666667
+                }, 
+                {
+                 "height":0,
+                 "id":12,
+                 "name":"EnterCastle",
+                 "point":true,
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":1616.33333333333,
+                 "y":18.3333333333333
+                }, 
+                {
+                 "height":0,
+                 "id":13,
+                 "name":"EnterCave",
+                 "point":true,
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":3119.66666666667,
+                 "y":466.666666666667
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -124,7 +148,7 @@
          "y":0
         }],
  "nextlayerid":12,
- "nextobjectid":5,
+ "nextobjectid":14,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.5.0",

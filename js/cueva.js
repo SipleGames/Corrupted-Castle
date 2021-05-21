@@ -1,90 +1,115 @@
-const config = {
-    type: Phaser.AUTO,
-    width: 400,
-    height: 400,
-    backgroundColor: '#000000',
-    physics: {
-        default: 'arcade',
-        arcade: {
-            gravity: {
-                y: 0
-            },
-            debug: true
-        }
-    },
-    scene: {
-        preload: preload,
-        create: create,
-        update: update
-    }
-};
+//nombre para colocar portal->Portal
+var tauro;
+var contadorArrow = 0;
+var heartText;
+var maxHearts = 3;
+var x;
+var y;
+var KeyA;
+var KeyW;
+var KeyS;
+var KeySpace;
+var KeyD;
+var KeyV;
+var KeyP;
+var arrowList1;
+var enemyTauroList1;
 
-const game = new Phaser.Game(config);
 
-function preload() {
+class Cueva extends Phaser.Scene{
+
+  
+constructor()
+{
+  super({key: "Cueva"})
+}
+
+
+preload() {
 
   //Personaje
-    this.load.spritesheet('hero', 'assets/images/character/animMov.png', { frameWidth: 32, frameHeight: 32 });
-    this.load.spritesheet('roll', 'assets/images/character/Character_Roll.png',{ frameWidth: 32, frameHeight: 32 });
-    this.load.spritesheet('atack', 'assets/images/character/swordt.png', { frameWidth: 32, frameHeight: 32 });
+    this.load.spritesheet('hero', 'assets/character/animMov.png', { frameWidth: 32, frameHeight: 32 });
+    this.load.spritesheet('roll', 'assets/character/Character_Roll.png',{ frameWidth: 32, frameHeight: 32 });
+    this.load.spritesheet('atack', 'assets/character/swordt.png', { frameWidth: 32, frameHeight: 32 });
 
   //Enemigo
-    this.load.spritesheet('enemyTauro', 'assets/images/enemies/tauro.png', {frameWidth: 50, frameHeight: 72});
+    this.load.spritesheet('enemyTauro', 'assets/enemies/tauro.png', {frameWidth: 50, frameHeight: 72});
 
   //Mapa
     this.load.image("tiles", 'assets/tiles/[Base]BaseChip_pipo.png');
-    this.load.image("sombras", 'assets/tiles/map_effect4.png');
+    //this.load.image("sombras", 'assets/tiles/map_effect4.png');
+    this.load.image("sombras2", 'assets/tiles/[A]Wall-Up_Dungeon1_pipo.png');
     this.load.tilemapTiledJSON("map", "assets/mapa/cueva.json");
 
+  //Flechas
+    this.load.atlas('atlas', 'assets/arrow/arrow.png', 'assets/arrow/arrow.json');
+
   //Corazones
-    this.load.image('heart', 'assets/images/Health/heart.png');
-    this.load.image('heartempty', 'assets/images/Health/border.png')
+    this.load.image('heart', 'assets/health/heart.png');
+    this.load.image('heartempty', 'assets/health/border.png')
 }
 
-function create() {
+create() {
   
-  player = this.physics.add.sprite(config.width / 2, config.height / 2, 'hero');
+  //TILEMAP
+  const map = this.make.tilemap({ key:"map" });
+  const tileset = map.addTilesetImage("[Base]BaseChip_pipo", "tiles");
+  const sombra = map.addTilesetImage("[A]Wall-Up_Dungeon1_pipo", "sombras2");
+
+  //const Techo = map.createStaticLayer("Techo", sombra, 0, 0);
+  const Piedras = map.createLayer("Piedras", tileset, 0, 0);
+  const Mundo = map.createLayer("World", tileset, 0, 0);
+  const Below = map.createLayer("Suelo", tileset, 0, 0);
+  
+  Below.setDepth(-1);
+  Mundo.setCollisionByProperty({ collides: true });
+  Techo.setCollisionByProperty({ collides: true });
+  Piedras.setCollisionByProperty({ collides: true });
+  this.physics.world.setBounds(0, 0, 1600, 1600); 
+  
+
+  
+  //SPAWNPOINT
+  const spawnPoint = map.findObject("Spawn Cueva", obj => obj.name === "Spawn Cueva");
+
+  player = this.physics.add.sprite(spawnPoint.x, spawnPoint.y, 'hero');
 	player.setSize(10,14);
+  player.setScale(1.2)
   player.speed = 175;
   player.speedRoll = 400;
 
 //Enemy
-  tauro = this.physics.add.group({
-    classType: 'enemyTauro'});
+  /*tauro = this.physics.add.group({
+    classType: 'enemyTauro'});*/
 
+  //Grupos
+  var arrowList1 = this.physics.add.group();
+  var enemyTauroList1 = this.physics.add.group();
   
-
-  
-  //TILEMAP
-  map = this.make.tilemap({ key:"map" });
-  tileset = map.addTilesetImage("[Base]BaseChip_pipo", "tiles");
-  sombra = map.addTilesetImage("map_effect4", "sombras");
-
-  Techo = map.createStaticLayer("Techo", sombra, 0, 0);
-  Mundo = map.createStaticLayer("World", tileset, 0, 0);
-  Below = map.createStaticLayer("Suelo", tileset, 0, 0);
-  Below.setDepth(-1);
-  Mundo.setCollisionByProperty({ collides: true });this.physics.world.setBounds(0, 0, 1600, 1600); 
   player.setCollideWorldBounds(true);
-
   
-  debugGraphics = this.add.graphics().setAlpha(0.7);
+  /*debugGraphics = this.add.graphics().setAlpha(0.7);
 	Mundo.renderDebug(debugGraphics, {
 		tileColor: null,
 		collidingTileColor: new Phaser.Display.Color(243, 134, 48, 255),
 		faceColor: new Phaser.Display.Color(40, 39, 37, 255)
-	});
-
-  this.physics.add.collider(tauro, Mundo);
+	});*/
+  //Colision mundo player y enemigo
+  this.physics.add.collider(enemyTauroList1, Mundo);
   this.physics.add.collider(Mundo, player)
   
- /* scene.physics.world.on(Phaser.Physics.Arcade.Events.TILE_COLLIDE, this.handleTileCollision, tauro);*/
+  
+  
+
   //CAMARA
 	this.cameras.main.setBounds(0, 0, 1600, 1600);
   this.cameras.main.startFollow(player);
 
+
+  this.physics.add.overlap(arrowList1, enemyTauroList1, destroyEnemy, null, this);
+
   //CORAZONES
-  const hearts = this.add.group({
+  /*const hearts = this.add.group({
     classType: Phaser.GameObjects.Image
   })
   hearts.createMultiple({
@@ -95,10 +120,11 @@ function create() {
       stepX: 18
     },
     quantity: 3
-  })
+  })*/
 
+  this.physics.add.collider(player, enemyTauroList1, shake, null, this);
+  heartText = this.add.text(16, 16, 'Hearts: '+ maxHearts, { fontSize: '16px', fill: '#ffc0cb' });
 
-  //SPAWNPOINT
 
   //MOVIMIENTO
     KeyW = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
@@ -107,6 +133,7 @@ function create() {
     KeyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
     KeyO = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.O);
     KeyP = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.P);
+    KeySpace = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
 
 //Animaciones movimiento
     this.anims.create({
@@ -229,52 +256,12 @@ function create() {
    
 
 }
-var UP;
-var DOWN;
-var LEFT;
-var RIGHT;
 
-/*var handleTileCollision(go: Phaser.GameObjects.GameObject, tile: Phaser.Tilemaps.Tile)
-{
-  if(go !== this)
-  {
-    return
-  }
+update() {
 
-  const newDirection = Phaser.Math.Between(0, 3);
-  tauro.direction = newDirection
-}*/
-
-
-function update() {
-
-  const Direction = {
-    UP,
-    DOWN,
-    LEFT,
-    RIGHT
-  };
   const taurospeed = 50;
 
-  switch(tauro.direction)
-  {
-    case Direction.UP:
-      tauro.setVelocity(0,-taurospeed);
-      break
-    
-    case Direction.DOWN:
-      tauro.setVelocity(0,taurospeed);
-      break
-    
-    case Direction.LEFT:
-      tauro.setVelocity(-taurospeed,0);
-      break
-
-    case Direction.RIGHT:
-      tauro.setVelocity(taurospeed,0);
-      break
-  }
-
+  createEnemy();
 
   //Codigo caminar
 
@@ -356,8 +343,34 @@ function update() {
     }
   }
 
-}
+   if (KeySpace.isDown)
+  {
+    if (contadorArrow == 0)
+    {
+      if (player.direccion == 1)
+      {
+        arrowCreatorLeft();
+      }
+      else if (player.direccion == 2)
+      {
+        arrowCreatorUp()
+      }
+      else if (player.direccion == 3)
+      {
+        arrowCreatorRight();
+      }
+      else if (player.direccion == 4)
+      {
+        arrowCreatorDown();
+      }
 
+      contadorArrow = 1000;
+    }
+    
+  }
+
+}
+}
 
 function downMovement()
 {
@@ -450,7 +463,57 @@ function atackRight()
   player.anims.play('atackright', true);
 }
 
+function createEnemy()
+{
+  for (i = 0; i < 1; i++)
+  {
+    enemyTauroList1 = this.physics.add.sprite(200, 200, "enemyTauro");
+    enemyTauroList1.setOrigin(0.5, 0.5);
+    enemyTauroList1.setScale(0.55, 0.55);
+    enemyTauroList1.direccion = 0;
+    enemyTauroList1.setSize(30,40);
+    enemyTauroList1.speed = 100;
+  }
+}
+
 function atackUp()
 {
   player.anims.play('atackup', true);
+}
+
+function destroyEnemy(a, e)
+{
+  a.disableBody(true, true);
+  e.disableBody(true, true);
+  arrowList1.remove(a);
+  enemyTauroList1.remove(e);
+}
+
+function shake(p, tl){
+  /*p.disableBody(false, false);
+  tl.disableBody(true, true);
+  enemyTauroList.remove(tl);
+  player.hearts -=1;
+  heartText.text = 'Hearts: ' + player.hearts;*/
+  if(player.hearts <= 0)
+  {
+    killPlayer();
+  }
+
+}
+
+function killPlayer()
+{
+  player.dead = true;
+  killSprite(player, restartGame);
+}
+
+function killSprite()
+{
+  player.destroy();
+}
+
+function restartGame()
+{
+  game.state.start(game.state.current);
 }
