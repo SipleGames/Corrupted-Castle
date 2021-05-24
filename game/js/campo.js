@@ -239,6 +239,37 @@ class Campo extends Phaser.Scene {
     randomY;
   }
 
+  savedatabase() {
+    var secret = 'mi contra senya';
+    var usuario = 'usuario@';
+    var funcion = 'guardar';
+    var direction = direccion;
+    var urlllamada = 'https://corrupted-castle.siplegames.repl.co/index.php';
+
+    var xhr = new XMLHttpRequest();
+
+    xhr.open('POST', urlllamada);
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+
+    // Acciones a procesar tras recibir la respuesta
+    xhr.onload = function() {
+        if (xhr.status === 200) {
+            console.log('Respuesta recibida: ' + xhr.responseText);
+        }
+        else if (xhr.status !== 200) {
+            console.log('Algo ha fallado: ' + xhr.status);
+        }
+    };
+    // Envia datos al servidor php
+    var datos = 'secret=' + secret + '&usuario=' + usuario + '&funcion=' + funcion + '&direction=' + direction;
+    // Debug
+    console.log(datos);
+    var datoscodificados = encodeURI(datos);
+    console.log(datoscodificados);
+    xhr.send(datoscodificados);
+  }
+
+
   update(){
     if (KeyS.isDown)
     {
