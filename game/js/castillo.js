@@ -21,22 +21,22 @@ class Castillo extends Phaser.Scene {
   preload()
   {      
       //Cargar mapa
-      this.load.tilemapTiledJSON("mapa", "assets/mapa/castillo.json");
-      this.load.image("tiles", "assets/tiles/[Base]BaseChip_pipo.png");
+      this.load.tilemapTiledJSON("mapa", "game/assets/mapa/castillo.json");
+      this.load.image("tiles", "game/assets/tiles/[Base]BaseChip_pipo.png");
 
       //Flechas
-      this.load.atlas('atlas', 'assets/arrow/arrow.png', 'assets/arrow/arrow.json');
+      this.load.atlas('atlas', 'game/assets/arrow/arrow.png', 'game/assets/arrow/arrow.json');
         
       //Personaje
-      this.load.spritesheet('hero', 'assets/character/animMov.png', {frameWidth: 32, frameHeight: 32});
-      this.load.spritesheet('roll', 'assets/character/Character_Roll.png', {frameWidth: 32, frameHeight: 32});
+      this.load.spritesheet('hero', 'game/assets/character/animMov.png', {frameWidth: 32, frameHeight: 32});
+      this.load.spritesheet('roll', 'game/assets/character/Character_Roll.png', {frameWidth: 32, frameHeight: 32});
 
       //Enemigo
-      this.load.spritesheet('enemyTauro', 'assets/enemies/tauro.png', {frameWidth: 50, frameHeight: 72});
-      this.load.spritesheet('enemyVolador', 'assets/enemies/volador.png', {frameWidth: 36,frameHeight: 50});
+      this.load.spritesheet('enemyTauro', 'game/assets/enemies/tauro.png', {frameWidth: 50, frameHeight: 72});
+      this.load.spritesheet('enemyVolador', 'game/assets/enemies/volador.png', {frameWidth: 36,frameHeight: 50});
 
       //Portal
-      this.load.image("portal", "assets/portal/portal.png");
+      this.load.image("portal", "game/assets/portal/portal.png");
   }
 
 

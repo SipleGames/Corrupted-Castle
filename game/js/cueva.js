@@ -28,25 +28,25 @@ constructor()
 preload() {
 
   //Personaje
-    this.load.spritesheet('hero', 'assets/character/animMov.png', { frameWidth: 32, frameHeight: 32 });
-    this.load.spritesheet('roll', 'assets/character/Character_Roll.png',{ frameWidth: 32, frameHeight: 32 });
-    this.load.spritesheet('atack', 'assets/character/swordt.png', { frameWidth: 32, frameHeight: 32 });
+    this.load.spritesheet('hero', 'game/assets/character/animMov.png', { frameWidth: 32, frameHeight: 32 });
+    this.load.spritesheet('roll', 'game/assets/character/Character_Roll.png',{ frameWidth: 32, frameHeight: 32 });
+    this.load.spritesheet('atack', 'game/assets/character/swordt.png', { frameWidth: 32, frameHeight: 32 });
 
   //Enemigo
-    this.load.spritesheet('enemyTauro', 'assets/enemies/tauro.png', {frameWidth: 50, frameHeight: 72});
+    this.load.spritesheet('enemyTauro', 'game/assets/enemies/tauro.png', {frameWidth: 50, frameHeight: 72});
 
   //Mapa
-    this.load.image("tiles", 'assets/tiles/[Base]BaseChip_pipo.png');
+    this.load.image("tiles", 'game/assets/tiles/[Base]BaseChip_pipo.png');
     //this.load.image("sombras", 'assets/tiles/map_effect4.png');
-    this.load.image("sombras2", 'assets/tiles/[A]Wall-Up_Dungeon1_pipo.png');
-    this.load.tilemapTiledJSON("map", "assets/mapa/cueva.json");
+    this.load.image("sombras2", 'game/assets/tiles/[A]Wall-Up_Dungeon1_pipo.png');
+    this.load.tilemapTiledJSON("map", "game/assets/mapa/cueva.json");
 
   //Flechas
-    this.load.atlas('atlas', 'assets/arrow/arrow.png', 'assets/arrow/arrow.json');
+    this.load.atlas('atlas', 'game/assets/arrow/arrow.png', 'assets/arrow/arrow.json');
 
   //Corazones
-    this.load.image('heart', 'assets/health/heart.png');
-    this.load.image('heartempty', 'assets/health/border.png')
+    this.load.image('heart', 'game/assets/health/heart.png');
+    this.load.image('heartempty', 'game/assets/health/border.png')
 }
 
 create() {

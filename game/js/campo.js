@@ -20,6 +20,7 @@ var finOleada = 0;
 var randomX;
 var randomY;
 var emyMovLi;
+var xhr;
 
 
 class Campo extends Phaser.Scene {
@@ -29,21 +30,21 @@ class Campo extends Phaser.Scene {
   }
 
   preload(){
-    this.load.tilemapTiledJSON('map', 'assets/mapa/campo.json');
-    this.load.image('tileBase', 'assets/tiles/[Base]BaseChip_pipo.png');
-    this.load.image('tileAgua', 'assets/tiles/[A]Water_pipo.png');
-    this.load.image('tileHierba', 'assets/tiles/[A]Grass_pipo.png');
+    this.load.tilemapTiledJSON('map', 'game/assets/mapa/campo.json');
+    this.load.image('tileBase', 'game/assets/tiles/[Base]BaseChip_pipo.png');
+    this.load.image('tileAgua', 'game/assets/tiles/[A]Water_pipo.png');
+    this.load.image('tileHierba', 'game/assets/tiles/[A]Grass_pipo.png');
 
-    this.load.atlas('atlas', 'assets/arrow/arrow.png', 'assets/arrow/arrow.json');
+    this.load.atlas('atlas', 'game/assets/arrow/arrow.png', 'game/assets/arrow/arrow.json');
 
-    this.load.spritesheet('hero', 'assets/character/animMov.png', {frameWidth: 32, frameHeight: 32});
-    this.load.spritesheet('roll', 'assets/character/Character_Roll.png', {frameWidth: 32, frameHeight: 32});
-    this.load.spritesheet('enemyTauro', 'assets/enemies/tauro.png', {frameWidth: 50, frameHeight: 72});
-    this.load.spritesheet('enemyVolador', 'assets/enemies/volador.png', {frameWidth: 36, frameHeight: 50});
+    this.load.spritesheet('hero', 'game/assets/character/animMov.png', {frameWidth: 32, frameHeight: 32});
+    this.load.spritesheet('roll', 'game/assets/character/Character_Roll.png', {frameWidth: 32, frameHeight: 32});
+    this.load.spritesheet('enemyTauro', 'game/assets/enemies/tauro.png', {frameWidth: 50, frameHeight: 72});
+    this.load.spritesheet('enemyVolador', 'game/assets/enemies/volador.png', {frameWidth: 36, frameHeight: 50});
 
 
     //Portal
-      this.load.image("portal", "assets/portal/portal.png");
+      this.load.image("portal", "game/assets/portal/portal.png");
   }
 
   create(){
@@ -239,38 +240,12 @@ class Campo extends Phaser.Scene {
     randomY;
   }
 
-  savedatabase() {
-    var secret = 'mi contra senya';
-    var usuario = 'usuario@';
-    var funcion = 'guardar';
-    var direction = direccion;
-    var urlllamada = 'https://corrupted-castle.siplegames.repl.co/index.php';
-
-    var xhr = new XMLHttpRequest();
-
-    xhr.open('POST', urlllamada);
-    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-
-    // Acciones a procesar tras recibir la respuesta
-    xhr.onload = function() {
-        if (xhr.status === 200) {
-            console.log('Respuesta recibida: ' + xhr.responseText);
-        }
-        else if (xhr.status !== 200) {
-            console.log('Algo ha fallado: ' + xhr.status);
-        }
-    };
-    // Envia datos al servidor php
-    var datos = 'secret=' + secret + '&usuario=' + usuario + '&funcion=' + funcion + '&direction=' + direction;
-    // Debug
-    console.log(datos);
-    var datoscodificados = encodeURI(datos);
-    console.log(datoscodificados);
-    xhr.send(datoscodificados);
-  }
-
+  
+  
 
   update(){
+
+    savedatabase();
     if (KeyS.isDown)
     {
       downMovement();
@@ -600,4 +575,37 @@ function changeCueva()
   this.scene.add("Cueva", new Cueva);
   this.scene.start("Cueva");
   this.scene.remove("Campo");
+}
+
+function savedatabase() {
+    var secret = 'mi contra senya';
+    var usuario = 'usuario@';
+    var funcion = 'guardar';
+    var direction = player.direccion;
+    var urlllamada = 'https://php-server.siplegames.repl.co/index.php';
+
+    xhr = new XMLHttpRequest();
+
+    xhr.open('POST', urlllamada);
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+
+    // Acciones a procesar tras recibir la respuesta
+    xhr.onload = xhrOnload();
+    // Envia datos al servidor php
+    var datos = 'secret=' + secret + '&usuario=' + usuario + '&funcion=' + funcion + '&direction=' + direction;
+    // Debug
+    console.log(datos);
+    var datoscodificados = encodeURI(datos);
+    console.log(datoscodificados);
+    xhr.send(datoscodificados);
+  }
+
+function xhrOnload()
+{
+  if (xhr.status === 200) {
+    console.log('Respuesta recibida: ' + xhr.responseText);
+  }
+  else if (xhr.status !== 200) {
+    console.log('Algo ha fallado: ' + xhr.status);
+  }
 }
