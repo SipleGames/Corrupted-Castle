@@ -1,28 +1,25 @@
 <?php
 
-$dbhost = "localhost";
-$dbuser = "root";
-$dbpass = "";
-$dbname = "pruebasphp";
+include("conexion.php");
 
-$conn = mysqli_connect($dbhost, $dbuser, $dbpass, $dbname);
-if (!$conn)
-{
-	die("No hay conexión: ".mysqli_connect_error());
-}
-
-$nombre = $_POST["txtusername"];
-$pass = $_POST["txtpassword"];
+$nombre = $_POST["username"];
+$pass = $_POST["password"];
 
 $query = mysqli_query($conn, "SELECT * FROM usuarios WHERE nombre_usuario = '".$nombre."' AND contrasena = '".$pass."' ");
 $nr = mysqli_num_rows($query);
 
 if ($nr == 1) {
-	echo "Bienvenido: " .$nombre;
+	echo "<script> 
+			alert('Bienvenido $nombre'); 
+			 window.location='../game.html'
+		</script>";
 
 }
-else if ($nr == 0) {
-	echo "Sos puto";
+else {
+	echo "<script> 
+			alert('Usuario no existe'); 
+			window.location='../index.html'
+		</script>";
 }
 
 ?>
