@@ -11,12 +11,15 @@ if (mysqli_query($conn, $sqlgrabar))
 {
 	echo "<script> 
 			alert('Usuario registrado con exito: $nombre'); 
-			window.location='http://localhost/CorruptedCastle/index.html'
+			window.location='../index.html'
 		</script>";
 }
 else
 {
-	echo "Error: ".$sql."<br>".mysql_error($conn);
+	echo "<script> 
+			alert('Usuario $nombre ya está registrado. Prueba con otro nombre o inicia sesión'); 
+			window.location='../index.html'
+		</script>";
 }
 
 ?>

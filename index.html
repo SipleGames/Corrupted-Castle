@@ -1,25 +1,52 @@
-<!DOCTYPE html>
 <html>
 <head>
-	<title>Corrupted Castle</title>
 	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+     <title>Corrupted Castle-Login</title>
+     <link rel="stylesheet" href="CSS/style.css">	
 </head>
 <body>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/phaser/3.54.0/phaser.min.js"></script>
 
-  <h2>Sign In</h2>
-  <form method="POST" action="php/login.php">
-    <label>Username</label>
-    <input type="text" placeholder="Usuario" name="username"/>
-    <label>Password</label>
-    <input type="password" placeholder="Contraseña" name="password"/>
-    <button type="submit" value="login">Sign In</button>
+  <div class="cajafuera" align="center">
+   
+  <div class="formulariocaja">
+      <form method="POST" action="php/login.php">
+      <div class="formtitulo">Sign In</div>
+      <div align="left" class="textoscajas">&#128273; Username</div>
+      <input type="text" name="username" class="cajaentradatexto" required>
+      <div align="left" class="textoscajas">
+      &#128274; Password
+      </div>
+      <input type="password" name="password" id="txtpassword" class="cajaentradatexto" required>
+       <div class="afcheckbox1" align="left">
+       <div style="float:left;">
+       <input type="checkbox" onclick="verpassword()" >
+       </div>
+       <div style="float:left;">
+       Mostrar contraseña
+       </div>
+       </div>
+       
+      <input type="submit" value="Sign In" class="botonenviar">
 
-    <a href="http://localhost/CorruptedCastle/register.html">Sign On</a>
-</form>
-
-
-
- 
+      <div style="margin-top:5%;">¿Aun no tienes cuenta?  <a href="register.html">Sign On</a></div>
+    </form>
+  </div> 
+  <div>
+  </div>
 </body>
-</html>
+
+  <script>
+    function verpassword(){
+        var tipo = document.getElementById("txtpassword");
+        if(tipo.type == "password")
+  	  {
+            tipo.type = "text";
+        }
+  	  else
+  	  {
+            tipo.type = "password";
+        }
+    }
+  </script>
