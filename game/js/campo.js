@@ -14,7 +14,7 @@ var text;
 var contadorArrow = 0;
 var contadorTauro = 0;
 var numTauro = 0;
-var vidas = 3;
+var vidas;
 var contarTauro = numTauro;
 var finOleada = 0;
 var randomX;
@@ -50,6 +50,7 @@ class Campo extends Phaser.Scene {
   create(){
 
     this.scene.add("Castillo", new Castillo);
+    this.scene.add("Cueva", new Cueva);
     //this.scene.add("Cueva", new Cueva);
     
     //Tilemap y colisiones
@@ -227,7 +228,7 @@ class Campo extends Phaser.Scene {
 
 
       this.text = this.add.text(32, 32).setScrollFactor(0).setFontSize(16).setColor('#ffffff');
-    text = this.add.text(750, 32);
+      text = this.add.text(750, 32);
 
     //Valores para el reload
     contadorArrow = 0;
@@ -572,27 +573,34 @@ function changeCastillo()
 
 function changeCueva()
 {
-  this.scene.add("Cueva", new Cueva);
   this.scene.start("Cueva");
   this.scene.remove("Campo");
 }
 
 function savedatabase() {
-    var secret = 'mi contra senya';
-    var usuario = 'usuario@';
-    var funcion = 'guardar';
+    var vida = vidas;
     var direction = player.direccion;
-    var urlllamada = 'https://php-server.siplegames.repl.co/index.php';
+    var oleada = finOleada;
+    var urlllamada = 'http://localhost/CorruptedCastle/php/index.php';
 
+//https://php-server.siplegames.repl.co/index.php
     xhr = new XMLHttpRequest();
 
     xhr.open('POST', urlllamada);
     xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 
     // Acciones a procesar tras recibir la respuesta
-    xhr.onload = xhrOnload();
+    xhr.onload = function xhrOnload()
+    {
+      if (xhr.status === 200) {
+        console.log('Respuesta recibida: ' + xhr.responseText);
+      }
+      else if (xhr.status !== 200) {
+        console.log('Algo ha fallado: ' + xhr.status);
+      }
+    }
     // Envia datos al servidor php
-    var datos = 'secret=' + secret + '&usuario=' + usuario + '&funcion=' + funcion + '&direction=' + direction;
+    var datos = 'vidas=' + vida + '&direction=' + direction;
     // Debug
     console.log(datos);
     var datoscodificados = encodeURI(datos);
@@ -600,12 +608,3 @@ function savedatabase() {
     xhr.send(datoscodificados);
   }
 
-function xhrOnload()
-{
-  if (xhr.status === 200) {
-    console.log('Respuesta recibida: ' + xhr.responseText);
-  }
-  else if (xhr.status !== 200) {
-    console.log('Algo ha fallado: ' + xhr.status);
-  }
-}

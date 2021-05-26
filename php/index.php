@@ -23,21 +23,17 @@ if ( !isset( $HTTP_RAW_POST_DATA ) ) {
     $HTTP_RAW_POST_DATA = file_get_contents( 'php://input' );
 } 
 
-$secret = filter_input(INPUT_POST, "secret", FILTER_SANITIZE_STRING);
-$usuario = filter_input(INPUT_POST, "usuario", FILTER_SANITIZE_STRING);
-$funcion = filter_input(INPUT_POST, "funcion", FILTER_SANITIZE_STRING);
+
 $direction = filter_input(INPUT_POST, "direction", FILTER_SANITIZE_STRING);
+$vida = filter_input(INPUT_POST, "vida", FILTER_SANITIZE_STRING);
 
 // respuesta en json
-if ( $secret != "" && $funcion != "" && $usuario != "" && $direction != "") {
-  /*
+if ($direction != "") {
+  
   echo "Se han recibido todos los parámetros<br>";
-  echo "Parametro 'secret' = $secret<br>";
-  echo "Parametro 'usuario' = $usuario<br>";
-  echo "Parametro 'funcion' = $funcion<br>";  
-  echo "Parametro 'contador' = $contador<br>";
-  echo "Parametro 'contadormax' = $contadormax<br>";
-  */
+  echo "Parametro 'vida' = $vida<br>";
+  echo "Parametro 'direction' = $direction<br>";
+  
   header('Content-type: application/json');
   $data = consulta_bbdd();
   echo json_encode( $data );
