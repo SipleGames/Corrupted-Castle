@@ -1,0 +1,14 @@
+{ "columns":8,
+ "image":"..\/..\/Pipoya RPG Tileset 32x32\/Pipoya RPG Tileset 32x32\/SampleMap\/[A]Grass_pipo.png",
+ "imageheight":2112,
+ "imagewidth":256,
+ "margin":0,
+ "name":"[A]Grass_pipo",
+ "spacing":0,
+ "tilecount":528,
+ "tiledversion":"1.4.3",
+ "tileheight":32,
+ "tilewidth":32,
+ "type":"tileset",
+ "version":1.4
+}
