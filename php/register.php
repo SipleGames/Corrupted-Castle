@@ -16,7 +16,7 @@ if (mysqli_query($conn, $sqlgrabar))
 }
 else
 {
-	echo "Error: ".$sql."<br>".mysql_error($conn);
+	echo "Error: ".$sqli."<br>".mysqli_error($conn);
 }
 
 ?>
