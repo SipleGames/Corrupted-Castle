@@ -16,10 +16,14 @@ if (mysqli_query($conn, $sqlgrabar))
 }
 else
 {
+
 	echo "<script> 
 			alert('Usuario $nombre ya está registrado. Prueba con otro nombre o inicia sesión'); 
 			window.location='../index.html'
 		</script>";
+
+	echo "Error: ".$sqli."<br>".mysqli_error($conn);
+
 }
 
 ?>
