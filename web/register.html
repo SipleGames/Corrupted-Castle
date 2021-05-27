@@ -3,7 +3,12 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
      <title>Corrupted Castle-Login</title>
-     <link rel="stylesheet" href="CSS/style.css">	
+     <link rel="stylesheet" href="CSS/style.css">
+
+     <script type="text/javascript" src="game/js/load.js"></script>
+    <script type="text/javascript">
+    window.addEventListener('load', loadEvents);
+  </script>
 </head>
 <body>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/phaser/3.54.0/phaser.min.js"></script>
@@ -11,15 +16,14 @@
   <div class="cajafuera" align="center">
    
   <div class="formulariocaja">
-      <form method="POST" action="php/register.php">
+      <form method="POST" action="">
       <div class="formtitulo">Sign On</div>
       <div align="left" class="textoscajas">&#128273; Username*</div>
-      <input type="text" name="username" class="cajaentradatexto" required>
+      <input type="text" name="username" class="cajaentradatexto" id="txtusername" required>
       <div align="left" class="textoscajas">
       &#128274; Password*
       </div>
-      <input type="password" name="password" id="txtpassword"
-       class="cajaentradatexto">
+      <input type="password" name="password" id="txtpassword" class="cajaentradatexto" required>
        <div class="afcheckbox1" align="left">
        <div style="float:left;">
        <input type="checkbox" onclick="verpassword()" >
@@ -29,7 +33,7 @@
        </div>
        </div>
        
-      <input type="submit" value="Sign On" class="botonenviar">
+      <input type="submit" id="SignOn" value="Sign On" class="botonenviar">
 
       <div style="margin-top:5%;">¿Ya tienes cuenta?  <a href="index.html">Sign In</a></div>
     </form>

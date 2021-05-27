@@ -26,13 +26,15 @@ if ( !isset( $HTTP_RAW_POST_DATA ) ) {
 
 $direction = filter_input(INPUT_POST, "direction", FILTER_SANITIZE_STRING);
 $vida = filter_input(INPUT_POST, "vida", FILTER_SANITIZE_STRING);
+$oleada = filter_input(INPUT_POST, "oleada", FILTER_SANITIZE_STRING);
 
 // respuesta en json
-if ($direction != "") {
+if ($vida != "" && $direction != "" && $oleada != "") {
   
   echo "Se han recibido todos los parámetros<br>";
   echo "Parametro 'vida' = $vida<br>";
   echo "Parametro 'direction' = $direction<br>";
+  echo "Parametro 'oleada' = $oleada<br>";
   
   header('Content-type: application/json');
   $data = consulta_bbdd();
@@ -40,7 +42,6 @@ if ($direction != "") {
   exit;
 }
 
-$secret="NADA";
 
 ?>
 
@@ -49,13 +50,13 @@ $secret="NADA";
     <title>PHP Webservice</title>
   </head>
   <body>
-    <h1>php database interface for Jumper Little Demo Phaser Game</h1>
+    <h1>php database interface for Corrupted Castle</h1>
     <div>
         Este sitio web no funciona por si solo.<br>
         Espera recibir una petición AJAX del juego.<br><br>
         
         <?php
-          echo "[" . $secret . "]";
+          echo "[NADA]";
         ?>
     </div>
     <h3>No se ha recibido ningún parámetro.</h3>

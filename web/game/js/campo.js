@@ -575,13 +575,14 @@ function changeCueva()
 {
   this.scene.start("Cueva");
   this.scene.remove("Campo");
+  this.scene.remove("Castillo");
 }
 
 function savedatabase() {
     var vida = vidas;
     var direction = player.direccion;
     var oleada = finOleada;
-    var urlllamada = 'http://localhost/CorruptedCastle/php/index.php';
+    var urlllamada = 'http://localhost/CorruptedCastle/web/php/index.php';
 
 //https://php-server.siplegames.repl.co/index.php
     xhr = new XMLHttpRequest();
@@ -600,7 +601,7 @@ function savedatabase() {
       }
     }
     // Envia datos al servidor php
-    var datos = 'vidas=' + vida + '&direction=' + direction;
+    var datos = 'vidas= ' + vida + '&direction= ' + direction + '&oleadas= ' + oleada;
     // Debug
     console.log(datos);
     var datoscodificados = encodeURI(datos);

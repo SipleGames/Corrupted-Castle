@@ -11,15 +11,15 @@
   <div class="cajafuera" align="center">
    
   <div class="formulariocaja">
-      <form method="POST" action="php/login.php">
-      <div class="formtitulo">Sign In</div>
+      <form method="POST" action="">
+      <div class="formtitulo">Log In</div>
       <div align="left" class="textoscajas">&#128273; Username</div>
       <input type="text" name="username" class="cajaentradatexto" required>
       <div align="left" class="textoscajas">
       &#128274; Password
       </div>
       <input type="password" name="password" id="txtpassword"
-       class="cajaentradatexto">
+       class="cajaentradatexto" required>
        <div class="afcheckbox1" align="left">
        <div style="float:left;">
        <input type="checkbox" onclick="verpassword()" >
@@ -29,7 +29,7 @@
        </div>
        </div>
        
-      <input type="submit" value="Sign In" class="botonenviar">
+      <input type="submit" id="LogIn" class="botonenviar">
 
       <div style="margin-top:5%;">¿Aun no tienes cuenta?  <a href="register.html">Sign On</a></div>
     </form>
