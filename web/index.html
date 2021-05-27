@@ -4,6 +4,11 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
      <title>Corrupted Castle-Login</title>
      <link rel="stylesheet" href="CSS/style.css">	
+
+     <script type="text/javascript" src="game/js/load.js"></script>
+    <script type="text/javascript">
+    window.addEventListener('load', loadLogin);
+  </script>
 </head>
 <body>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/phaser/3.54.0/phaser.min.js"></script>
@@ -11,7 +16,7 @@
   <div class="cajafuera" align="center">
    
   <div class="formulariocaja">
-      <form method="POST" action="">
+      <form method="POST" action="php/login.php">
       <div class="formtitulo">Log In</div>
       <div align="left" class="textoscajas">&#128273; Username</div>
       <input type="text" name="username" class="cajaentradatexto" required>
@@ -29,7 +34,7 @@
        </div>
        </div>
        
-      <input type="submit" id="LogIn" class="botonenviar">
+      <input type="submit" id="LogIn" value="Log In" class="botonenviar">
 
       <div style="margin-top:5%;">¿Aun no tienes cuenta?  <a href="register.html">Sign On</a></div>
     </form>

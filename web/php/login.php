@@ -1,25 +1,74 @@
 <?php
 
-include("conexion.php");
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
 
-$nombre = $_POST["username"];
-$pass = $_POST["password"];
+  function login_bbdd( $usuario, $contrasenya ) {
 
-$query = mysqli_query($conn, "SELECT * FROM usuarios WHERE nombre_usuario = '".$nombre."' AND contrasena = '".$pass."' ");
-$nr = mysqli_num_rows($query);
+    include("conexion.php");
 
-if ($nr == 1) {
-	echo "<script> 
-			alert('Bienvenido $nombre'); 
-			 window.location='../game.html'
-		</script>";
 
-}
-else {
-	echo "<script> 
-			alert('Usuario no existe'); 
-			window.location='../index.html'
-		</script>";
-}
 
+    $query = mysqli_query($conn, "SELECT * FROM jugadores WHERE nombre_usuario = '".$usuario."' AND contrasena = '".$contrasenya."' ");
+    $nr = mysqli_num_rows($query);
+
+    if ($nr == 1) {
+      return 1;
+    }
+    else {
+      return 0;
+    }
+  }
+
+  // Permite peticiones php desde culquien origen
+  // esto deberia de delimitarse solo a la url del juego
+  header('Access-Control-Allow-Origin: ');
+
+  // Comprobamos si se han recibido parámetros
+  if ( !isset( $HTTP_RAW_POST_DATA ) ) { 
+      $HTTP_RAW_POST_DATA = file_get_contents( 'php://input' );
+  } 
+
+  $nombre = filter_input(INPUT_POST, "username", FILTER_SANITIZE_STRING);
+  $pass = filter_input(INPUT_POST, "password", FILTER_SANITIZE_STRING);
+
+  // respuesta en alerta
+  if ( $nombre != "" && $pass != "" ) {
+    $respuesta = login_bbdd($nombre, $pass);
+
+    if ($respuesta == 1) {
+      echo "<script> 
+      alert('Bienvenido: $nombre.'); 
+      window.location='../game.html'
+      </script>";
+    }
+    else if ($respuesta != 0) {
+      echo "<script> 
+      alert('$nombre no existe, prueba con otro nombre o prueba a registrarte.'); 
+      window.location='../game.html'
+      </script>";
+    }
+
+
+    
+    exit;
+  }
 ?>
+
+
+<html>
+  <head>
+    <title>login.php</title>
+  </head>
+  <body>
+    <h1>php database interface for Corrupted Castle</h1>
+    <div>
+        Este sitio web no funciona por si solo.<br>
+        Espera recibir una petición AJAX del juego.<br><br>
+
+        
+
+    </div>
+    <h3>No se ha recibido ningún parámetro.</h3>
+  </body>
+</html>

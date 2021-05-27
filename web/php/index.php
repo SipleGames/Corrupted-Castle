@@ -3,15 +3,23 @@
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
-function consulta_bbdd() {
+function guardado_player_bbdd($vida, $direction, $positionx, $positiony) {
+  
+  include("conexion.php");
+  include("login.php");
+
   // aqui hace lo necesario para consultar o escribir en la base de datos
-  $datos = array();
-  $response[0] = array(
-    'id' => '1',
-    'valor1'=> 'v1',
-    'valor2'=> 'v2'
-  );
-  return $datos;
+  $sqlgrabar = "INSERT INTO jugadores(direccion, posicionx, posiciony, vida) VALUES ('$direction','$positionx','$positiony',$vida)";
+
+    if (mysqli_query($conn, $sqlgrabar))
+    {
+      return "Guardadado correctamente";
+    }
+    else
+    {
+      return "El guardadado ha fallado";
+    }
+    
 }
 
 // Permite peticiones php desde culquien origen
@@ -26,19 +34,27 @@ if ( !isset( $HTTP_RAW_POST_DATA ) ) {
 
 $direction = filter_input(INPUT_POST, "direction", FILTER_SANITIZE_STRING);
 $vida = filter_input(INPUT_POST, "vida", FILTER_SANITIZE_STRING);
+$positionx= filter_input(INPUT_POST, "positionx", FILTER_SANITIZE_STRING);
+$positiony = filter_input(INPUT_POST, "positiony", FILTER_SANITIZE_STRING);
+$savegame = filter_input(INPUT_POST, "savegame", FILTER_SANITIZE_STRING);
 $oleada = filter_input(INPUT_POST, "oleada", FILTER_SANITIZE_STRING);
 
+$positionx = abs($positionx);
+$positiony = abs($positiony);
+
+
 // respuesta en json
-if ($vida != "" && $direction != "" && $oleada != "") {
+if ($vida != "" && $direction != "") {
   
   echo "Se han recibido todos los parámetros<br>";
   echo "Parametro 'vida' = $vida<br>";
   echo "Parametro 'direction' = $direction<br>";
   echo "Parametro 'oleada' = $oleada<br>";
   
-  header('Content-type: application/json');
-  $data = consulta_bbdd();
-  echo json_encode( $data );
+  $data = guardado_player_bbdd($vida, $direction, $positionx, $positiony);
+  echo "<script> 
+      alert('$data'); 
+    </script>";
   exit;
 }
 

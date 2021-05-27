@@ -581,6 +581,8 @@ function changeCueva()
 function savedatabase() {
     var vida = vidas;
     var direction = player.direccion;
+    var positionx = player.x;
+    var positiony = player.y;
     var oleada = finOleada;
     var urlllamada = 'http://localhost/CorruptedCastle/web/php/index.php';
 
@@ -601,11 +603,10 @@ function savedatabase() {
       }
     }
     // Envia datos al servidor php
-    var datos = 'vidas= ' + vida + '&direction= ' + direction + '&oleadas= ' + oleada;
+    var datos = 'vidas= ' + vida + '&direction= ' + direction + '&positionx= ' + positionx + '&positiony ' + positiony;
     // Debug
     console.log(datos);
-    var datoscodificados = encodeURI(datos);
-    console.log(datoscodificados);
-    xhr.send(datoscodificados);
+  
+    xhr.send(datos);
   }
 

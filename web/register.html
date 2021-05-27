@@ -2,13 +2,13 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-     <title>Corrupted Castle-Login</title>
-     <link rel="stylesheet" href="CSS/style.css">
-
-     <script type="text/javascript" src="game/js/load.js"></script>
-    <script type="text/javascript">
-    window.addEventListener('load', loadEvents);
-  </script>
+    <title>Corrupted Castle Sign On</title>    
+    <link rel="stylesheet" href="CSS/style.css">
+    <script type="text/javascript" src="game/js/load.js"></script>
+	<script type="text/javascript">
+		window.addEventListener('load', loadRegistred);
+	</script>
+     
 </head>
 <body>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/phaser/3.54.0/phaser.min.js"></script>
@@ -16,16 +16,15 @@
   <div class="cajafuera" align="center">
    
   <div class="formulariocaja">
-      <form method="POST" action="">
+      <form method="POST" action="php/newusser.php">
 
       <div class="formtitulo">Sign On</div>
       <div align="left" class="textoscajas">&#128273; Username*</div>
-      <input type="text" name="username" class="cajaentradatexto" id="txtusername" required>
+      <input type="text" name="username" class="cajaentradatexto" required placeholder="Username">
       <div align="left" class="textoscajas">
       &#128274; Password*
       </div>
-      <input type="password" name="password" id="txtpassword"
-       class="cajaentradatexto" required>
+      <input type="password" name="password" class="cajaentradatexto" required placeholder="Password">
        <div class="afcheckbox1" align="left">
        <div style="float:left;">
        <input type="checkbox" onclick="verpassword()" >
