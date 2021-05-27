@@ -57,10 +57,14 @@
         Este sitio web no funciona por si solo.<br>
         Espera recibir una petición AJAX del juego.<br><br>
 
+
         <?php
           echo "[".$respuesta."]";
         ?>
-        
+
+        <?php
+          echo "Espera recibir un usuario y una contraseña]";
+        ?>
     </div>
     <h3>No se ha recibido ningún parámetro.</h3>
   </body>
