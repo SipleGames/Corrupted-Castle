@@ -7,8 +7,6 @@ error_reporting(E_ALL);
 
     include("conexion.php");
 
-
-
     $query = mysqli_query($conn, "SELECT * FROM jugadores WHERE nombre_usuario = '".$usuario."' AND contrasena = '".$contrasenya."' ");
     $nr = mysqli_num_rows($query);
 
@@ -42,10 +40,10 @@ error_reporting(E_ALL);
       window.location='../game.html'
       </script>";
     }
-    else if ($respuesta != 0) {
+    else{
       echo "<script> 
       alert('$nombre no existe, prueba con otro nombre o prueba a registrarte.'); 
-      window.location='../game.html'
+      window.location='../index.html'
       </script>";
     }
 

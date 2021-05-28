@@ -7,17 +7,26 @@ error_reporting(E_ALL);
 
     include("conexion.php");
 
+    $query = mysqli_query($conn, "SELECT * FROM jugadores WHERE nombre_usuario = '".$usuario."'");
+    $nr = mysqli_num_rows($query);
 
-    $sqlgrabar = "INSERT INTO jugadores(nombre_usuario,contrasena) VALUES ('$usuario','$contrasenya')";
-
-    if (mysqli_query($conn, $sqlgrabar))
-    {
-      return "Registro completado, nombre usuario: $usuario.";
-    }
-    else
+    if ($nr == 1)
     {
       return "Nombre de usuario $usuario ya exite, introduce un nombre válido.";
     }
+    else
+    {
+      $sqlgrabar = "INSERT INTO jugadores(nombre_usuario,contrasena) VALUES ('$usuario','$contrasenya')";
+      if (mysqli_query($conn, $sqlgrabar))
+      {
+        return "Registro completado, nombre usuario: $usuario.";
+      }
+      else
+      {
+        return "Error de registro.";
+      }
+    } 
+    
   }
 
   // Permite peticiones php desde culquien origen

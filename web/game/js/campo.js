@@ -1,4 +1,3 @@
-//https://lab-prototype.skullag.repl.co/web/index.html
 //deliver
 var KeyA;
 var KeyW;
@@ -246,7 +245,8 @@ class Campo extends Phaser.Scene {
 
   update(){
 
-    savedatabase();
+    
+
     if (KeyS.isDown)
     {
       downMovement();
@@ -374,7 +374,7 @@ class Campo extends Phaser.Scene {
       'playerY: ' + player.y
     ]);
 
-  
+  letsSaveGame();
   }
 }
 
@@ -578,12 +578,17 @@ function changeCueva()
   this.scene.remove("Castillo");
 }
 
+function letsSaveGame()
+{
+  document.getElementById("savegame").addEventListener('click', savedatabase);
+}
+
 function savedatabase() {
+    var push = 1;
     var vida = vidas;
     var direction = player.direccion;
     var positionx = player.x;
     var positiony = player.y;
-    var oleada = finOleada;
     var urlllamada = 'http://localhost/CorruptedCastle/web/php/index.php';
 
 //https://php-server.siplegames.repl.co/index.php
@@ -603,10 +608,9 @@ function savedatabase() {
       }
     }
     // Envia datos al servidor php
-    var datos = 'vidas= ' + vida + '&direction= ' + direction + '&positionx= ' + positionx + '&positiony ' + positiony;
+    var datos = 'vidas= ' + vida + '&direction= ' + direction + '&positionx= ' + positionx + '&positiony ' + positiony + '&push= '  + push;
     // Debug
     console.log(datos);
-  
     xhr.send(datos);
   }
 
