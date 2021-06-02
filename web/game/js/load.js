@@ -87,5 +87,5 @@ function getLoged() {
 
 function getSaveGame()
 {
-	alert('ALERTA');
+	
 }

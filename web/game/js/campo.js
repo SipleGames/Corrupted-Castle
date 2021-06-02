@@ -13,13 +13,12 @@ var text;
 var contadorArrow = 0;
 var contadorTauro = 0;
 var numTauro = 0;
-var vidas;
 var contarTauro = numTauro;
 var finOleada = 0;
 var randomX;
 var randomY;
 var emyMovLi;
-var xhr;
+var vidas;
 
 
 class Campo extends Phaser.Scene {
@@ -136,6 +135,7 @@ class Campo extends Phaser.Scene {
     KeyS=this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
     KeyP=this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.P);
     KeySpace=this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+    KeyV=this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.V);
 
     //Camara
     this.physics.world.setBounds(0, 0, 3200, 3200);
@@ -245,7 +245,10 @@ class Campo extends Phaser.Scene {
 
   update(){
 
-    
+    if (KeyV.isDown)
+    {
+      savedatabase();
+    }
 
     if (KeyS.isDown)
     {
@@ -373,8 +376,6 @@ class Campo extends Phaser.Scene {
       'playerX: ' + player.x,
       'playerY: ' + player.y
     ]);
-
-  letsSaveGame();
   }
 }
 
@@ -578,15 +579,9 @@ function changeCueva()
   this.scene.remove("Castillo");
 }
 
-function letsSaveGame()
-{
-  document.getElementById("savegame").addEventListener('click', savedatabase);
-}
-
 function savedatabase() {
-    var push = 1;
     var vida = vidas;
-    var direction = player.direccion;
+    var directions = player.direccion;
     var positionx = player.x;
     var positiony = player.y;
     var urlllamada = 'http://localhost/CorruptedCastle/web/php/index.php';
@@ -608,7 +603,7 @@ function savedatabase() {
       }
     }
     // Envia datos al servidor php
-    var datos = 'vidas= ' + vida + '&direction= ' + direction + '&positionx= ' + positionx + '&positiony ' + positiony + '&push= '  + push;
+    var datos = 'Vidas= ' + vida + ' Direction= ' + direction + ' Positionx= ' + positionx + ' Positiony ' + positiony;
     // Debug
     console.log(datos);
     xhr.send(datos);

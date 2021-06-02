@@ -50,6 +50,13 @@ error_reporting(E_ALL);
     </script>";
     exit;
   }
+  else
+  {
+    echo "<script> 
+      alert('Parametro no recibidos'); 
+      window.location='../index.html'
+    </script>";
+  }
 ?>
 
 
@@ -62,9 +69,6 @@ error_reporting(E_ALL);
     <div>
         Este sitio web no funciona por si solo.<br>
         Espera recibir una petición AJAX del juego.<br><br>
-
-        
-
     </div>
     <h3>No se ha recibido ningún parámetro.</h3>
   </body>
