@@ -579,33 +579,36 @@ function changeCueva()
   this.scene.remove("Castillo");
 }
 
-function savedatabase() {
-    var vida = vidas;
-    var directions = player.direccion;
-    var positionx = player.x;
-    var positiony = player.y;
-    var urlllamada = 'http://localhost/CorruptedCastle/web/php/index.php';
+function savedatabase()
+{
+  var directions = player.direccion;
+  var vida = vidas;
+  var positionx = player.x;
+  var positiony = player.y
+  var urlllamada = 'http://localhost/CorruptedCastle/web/php/saveDatos.php';
 
-//https://php-server.siplegames.repl.co/index.php
-    xhr = new XMLHttpRequest();
+  xhr = new XMLHttpRequest();
 
-    xhr.open('POST', urlllamada);
-    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+  xhr.open('POST', urlllamada);
+  xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 
-    // Acciones a procesar tras recibir la respuesta
-    xhr.onload = function xhrOnload()
-    {
-      if (xhr.status === 200) {
-        console.log('Respuesta recibida: ' + xhr.responseText);
-      }
-      else if (xhr.status !== 200) {
-        console.log('Algo ha fallado: ' + xhr.status);
-      }
+  // Acciones a procesar tras recibir la respuesta
+  xhr.onload = function xhrOnload()
+  {
+    if (xhr.status === 200) {
+      console.log('Respuesta recibida: ' + xhr.responseText);
     }
-    // Envia datos al servidor php
-    var datos = 'Vidas= ' + vida + ' Direction= ' + direction + ' Positionx= ' + positionx + ' Positiony ' + positiony;
-    // Debug
-    console.log(datos);
-    xhr.send(datos);
+    else if (xhr.status !== 200) {
+      console.log('Algo ha fallado: ' + xhr.status);
+    }
   }
+  // Envia datos al servidor php
+  datos = 'directions= ' + directions + 'vida=' + vida + 'positionx=' + positionx + 'positiony=' + positiony;
+  // Debug
+  console.log(datos);
+  //var datoscodificados = encodeURI(datos);
+  //console.log(datoscodificados)
+  xhr.send(datos);
+
+}
 

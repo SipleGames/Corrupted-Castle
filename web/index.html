@@ -5,10 +5,10 @@
      <title>Corrupted Castle-Login</title>
      <link rel="stylesheet" href="CSS/style.css">	
 
-     <script type="text/javascript" src="game/js/load.js"></script>
-    <script type="text/javascript">
-    window.addEventListener('load', loadLogin);
-  </script>
+       <script type="text/javascript" src="game/js/load.js"></script>
+      <script type="text/javascript">
+      window.addEventListener('load', loadLogin);
+    </script>
 </head>
 <body>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/phaser/3.54.0/phaser.min.js"></script>
@@ -19,12 +19,11 @@
       <form method="POST" action="php/login.php">
       <div class="formtitulo">Log In</div>
       <div align="left" class="textoscajas">&#128273; Username</div>
-      <input type="text" name="username" class="cajaentradatexto" required>
+      <input type="text" name="username" class="cajaentradatexto" required placeholder="Username">
       <div align="left" class="textoscajas">
       &#128274; Password
       </div>
-      <input type="password" name="password" id="txtpassword"
-       class="cajaentradatexto" required>
+      <input type="password" name="password" id="txtpassword" class="cajaentradatexto" required placeholder="Password">
        <div class="afcheckbox1" align="left">
        <div style="float:left;">
        <input type="checkbox" onclick="verpassword()" >

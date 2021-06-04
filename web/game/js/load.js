@@ -1,9 +1,3 @@
-
-function loadSaveGame()
-{
-	document.getElementById("savegame").addEventListener('click', getSaveGame);
-}
-
 function loadRegistred()
 {
 	document.getElementById("SignOn").addEventListener('click', getRegistred);
@@ -22,8 +16,6 @@ function getRegistred() {
 
 	if (username.length > 0 && password.length > 0)
 	{
-
-		//https://php-server.siplegames.repl.co/index.php
 		xhr = new XMLHttpRequest();
 
 		xhr.open('POST', urlllamada);
@@ -41,7 +33,7 @@ function getRegistred() {
 	    }
 		
 		// Envia datos al servidor php
-		var datos = 'Usuario= ' + username + ' Password= ' + password;
+		var datos = 'username= ' + username + ' password= ' + password;
 		// Debug
 		console.log(datos);
 		//var datoscodificados = encodeURI(datos);
@@ -83,9 +75,4 @@ function getLoged() {
 		//console.log(datoscodificados);
 		xhr.send(datos);
 	}
-}
-
-function getSaveGame()
-{
-	
 }

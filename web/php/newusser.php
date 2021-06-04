@@ -50,13 +50,6 @@ error_reporting(E_ALL);
     </script>";
     exit;
   }
-  else
-  {
-    echo "<script> 
-      alert('Parametro no recibidos'); 
-      window.location='../index.html'
-    </script>";
-  }
 ?>
 
 
