@@ -32,6 +32,7 @@ var pocion;
 var potion;
 var apple;
 var Portal;
+var tauros;
 
 
 class Cueva extends Phaser.Scene{
@@ -141,7 +142,7 @@ create() {
   this.physics.add.collider(Mundo, player);
   this.physics.add.overlap(player, tauro, shake, null, this);
   ;
-  this.physics.add.overlap(arrowList, tauro, enemyDie, null, this);
+  this.physics.add.overlap(arrowList, tauros, enemyDie, null, this);
 
   this.physics.add.overlap(player, potion, llevarinv, null, this);
     this.physics.add.overlap(player, apple, llevarinv, null, this)
@@ -190,7 +191,6 @@ create() {
     Key5 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.FIVE);
     KeyL = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.L);
     KeyV = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.V);
-
 
 //Animaciones movimiento
      this.anims.create({
@@ -313,12 +313,12 @@ update(time, delta) {
 
   }
 
-  //UPDATE BBDD
-   if (KeyV.isDown)
+
+  //Pasar datos a la BBDD
+  if (KeyV.isDown)
     {
       savedatabase();
     }
-
 
   //Codigo caminar
 
@@ -555,7 +555,7 @@ function destroyEnemy(a, e)
   a.disableBody(true, true);
   e.disableBody(true, true);
   arrowList.remove(a);
-  tauro.remove(e);
+  tauros.remove(e);
 }
 
 function shake(){
