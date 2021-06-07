@@ -606,8 +606,5 @@ function savedatabase()
   datos = 'directions=' + directions + '&vida=' + vida + '&positionx=' + positionx + '&positiony=' + positiony;
   // Debug
   console.log(datos);
-  //var datoscodificados = encodeURI(datos);
-  //console.log(datoscodificados)
   xhr.send(datos); 
 }
-
