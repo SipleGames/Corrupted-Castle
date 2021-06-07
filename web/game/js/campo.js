@@ -6,6 +6,7 @@ var KeySpace;
 var KeyD;
 var KeyV;
 var KeyP;
+var KeyO;
 var player;
 var arrowList;
 var enemyTauroList;
@@ -34,6 +35,7 @@ class Campo extends Phaser.Scene {
     this.load.image('tileHierba', 'game/assets/tiles/[A]Grass_pipo.png');
 
     this.load.atlas('atlas', 'game/assets/arrow/arrow.png', 'game/assets/arrow/arrow.json');
+    this.load.spritesheet('atack', 'game/assets/character/swordt.png', { frameWidth: 32, frameHeight: 32 });
 
     this.load.spritesheet('hero', 'game/assets/character/animMov.png', {frameWidth: 32, frameHeight: 32});
     this.load.spritesheet('roll', 'game/assets/character/Character_Roll.png', {frameWidth: 32, frameHeight: 32});
@@ -49,7 +51,6 @@ class Campo extends Phaser.Scene {
 
     this.scene.add("Castillo", new Castillo);
     this.scene.add("Cueva", new Cueva);
-    //this.scene.add("Cueva", new Cueva);
     
     //Tilemap y colisiones
     const map = this.make.tilemap({ key: "map" });
@@ -136,6 +137,7 @@ class Campo extends Phaser.Scene {
     KeyP=this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.P);
     KeySpace=this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
     KeyV=this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.V);
+    KeyO=this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.O);
 
     //Camara
     this.physics.world.setBounds(0, 0, 3200, 3200);
@@ -215,6 +217,52 @@ class Campo extends Phaser.Scene {
         frameRate: 10,
         repeat: -1
       });
+
+      //Animaciones ataques
+    this.anims.create({
+      key: 'atackdown',
+      frames: this.anims.generateFrameNumbers('atack', {start: 0, end: 4}),
+      frameRate: 10,
+      repeat: -1
+    });
+    this.anims.create({
+      key: 'atackright',
+      frames: this.anims.generateFrameNumbers('atack', {start: 5, end: 9}),
+      frameRate: 10,
+      repeat: -1
+    });
+    this.anims.create({
+      key: 'atackleft',
+      frames: this.anims.generateFrameNumbers('atack', {start: 10, end: 14}),
+      frameRate: 10,
+      repeat: -1
+    });
+    this.anims.create({
+      key: 'atackup',
+      frames: this.anims.generateFrameNumbers('atack', {start: 15, end: 19}),
+      frameRate: 10,
+      repeat: -1
+    });
+
+  //Animacion Enemigo
+  this.anims.create({
+      key: 'tauroleft',
+      frames: this.anims.generateFrameNumbers('enemyTauro', {start: 4, end: 7}),
+      frameRate: 10,
+      repeat: -1
+    });
+  this.anims.create({
+      key: 'tauroright',
+      frames: this.anims.generateFrameNumbers('enemyTauro', {start: 8, end: 11}),
+      frameRate: 10,
+      repeat: -1
+    });
+  this.anims.create({
+      key: 'tauroup',
+      frames: this.anims.generateFrameNumbers('enemyTauro', {start: 12, end: 15}),
+      frameRate: 10,
+      repeat: -1
+    });
 
 
       //Animacion enemigos a mele
@@ -352,6 +400,26 @@ class Campo extends Phaser.Scene {
         contadorArrow = 1000;
       }
       
+    }
+
+    if (KeyO.isDown)
+    {
+      if (player.direccion == 1)
+      {
+        atackLeft();
+      }
+      else if (player.direccion == 2)
+      {
+        atackUp();
+      }
+      else if (player.direccion == 3)
+      {
+        atackRight();
+      }
+      else if (player.direccion == 4)
+      {
+        atackDown();
+      }
     }
 
     if (contadorArrow > 0)

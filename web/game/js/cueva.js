@@ -55,13 +55,13 @@ preload() {
     this.load.spritesheet('enemyTauro', 'game/assets/enemies/tauro.png', {frameWidth: 50, frameHeight: 72});
 
   //Mapa
-    this.load.image("tiles", 'game/assets/tiles/[Base]BaseChip_pipo16x16.png');
-    this.load.image("sombras", 'game/assets/tiles/[A]Wall-Up_Dungeon1_pipo.png');
-    this.load.tilemapTiledJSON("map", "game/assets/mapa/cueva.json");
-    this.load.image("portal", "game/assets/portal/portal.png");
+    this.load.tilemapTiledJSON('map', 'game/assets/mapa/cueva.json');
+    this.load.image('tiles', 'game/assets/tiles/[Base]BaseChip_pipo16x16.png');
+    this.load.image('sombras', 'game/assets/tiles/[A]Wall-Up_Dungeon1_pipo.png');
+    this.load.image('portal', 'game/assets/portal/portal.png');
 
   //Flechas
-    this.load.atlas('atlas', 'game/assets/arrow/arrow.png', 'assets/arrow/arrow.json');
+    this.load.atlas('atlas', 'game/assets/arrow/arrow.png', 'game/assets/arrow/arrow.json');
 
   //Inventario
     this.load.image('pocion', 'game/assets/inventario/pocion.png');
