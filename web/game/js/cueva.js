@@ -17,6 +17,7 @@ var KeySpace;
 var KeyD;
 var KeyV;
 var KeyP;
+var KeyV;
 var KeyL, Key1, Key2, Key3, Key4, Key5;
 var arrowList;
 var enemyTauroList;
@@ -31,6 +32,7 @@ var pocion;
 var potion;
 var apple;
 var Portal;
+var tauros;
 
 
 class Cueva extends Phaser.Scene{
@@ -140,7 +142,7 @@ create() {
   this.physics.add.collider(Mundo, player);
   this.physics.add.overlap(player, tauro, shake, null, this);
   ;
-  this.physics.add.overlap(arrowList, tauro, enemyDie, null, this);
+  this.physics.add.overlap(arrowList, tauros, enemyDie, null, this);
 
   this.physics.add.overlap(player, potion, llevarinv, null, this);
     this.physics.add.overlap(player, apple, llevarinv, null, this)
@@ -188,6 +190,7 @@ create() {
     Key4 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.FOUR);
     Key5 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.FIVE);
     KeyL = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.L);
+    KeyV = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.V);
 
 //Animaciones movimiento
      this.anims.create({
@@ -309,6 +312,12 @@ update(time, delta) {
     }
 
   }
+
+  //Pasar datos a la BBDD
+  if (KeyV.isDown)
+    {
+      savedatabase();
+    }
 
   //Codigo caminar
 
@@ -545,7 +554,7 @@ function destroyEnemy(a, e)
   a.disableBody(true, true);
   e.disableBody(true, true);
   arrowList.remove(a);
-  tauro.remove(e);
+  tauros.remove(e);
 }
 
 function shake(){
@@ -676,4 +685,35 @@ function changeCampo()
   
   
 
+}
+
+function savedatabase()
+{
+  var directions = player.direccion;
+  var vida = vidas;
+  var positionx = player.x;
+  var positiony = player.y
+  
+  var urlllamada = 'http://localhost/CorruptedCastle/web/php/index.php';
+
+  xhr = new XMLHttpRequest();
+
+  xhr.open('POST', urlllamada);
+  xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+
+  // Acciones a procesar tras recibir la respuesta
+  xhr.onload = function xhrOnload()
+  {
+    if (xhr.status === 200) {
+      console.log('Respuesta recibida: ' + xhr.responseText);
+    }
+    else if (xhr.status !== 200) {
+      console.log('Algo ha fallado: ' + xhr.status);
+    }
+  }
+  // Envia datos al servidor php
+  datos = 'directions=' + directions + '&vida=' + vida + '&positionx=' + positionx + '&positiony=' + positiony;
+  // Debug
+  console.log(datos);
+  xhr.send(datos); 
 }

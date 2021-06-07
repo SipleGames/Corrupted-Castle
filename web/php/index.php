@@ -3,13 +3,14 @@
   ini_set('display_errors', 1);
   error_reporting(E_ALL);
 
-  function guardado_bbdd($vida, $direccion, $posicionx, $posiciony) {
+  function guardado_bbdd($vida, $direccion, $posicionx, $posiciony)
+  {
     
     include("conexion.php");
 
 
     // aqui hace lo necesario para consultar o escribir en la base de datos
-    $sqlupdate = "UPDATE jugadores SET direccion = '$direccion', posicionx = '$posicionx', posiciony = '$posiciony', vida = '$vida' WHERE codigo = '3'";
+    $sqlupdate = "UPDATE jugadores SET direccion = '$direccion', posicionx = '$posicionx', posiciony = '$posiciony', vida = '$vida' WHERE codigo = '1'";
 
       if (mysqli_query($conn, $sqlupdate))
       {

@@ -7,6 +7,7 @@ var KeySpace;
 var KeyD;
 var KeyP;
 var KeyC;
+var KeyV;
 var player;
 var enemyTauro;
 var enemyDown;
@@ -114,6 +115,7 @@ class Castillo extends Phaser.Scene {
       KeyD=this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
       KeyP=this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.P);
       KeySpace=this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+      KeyV=this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.V);
       
 
     //CAMARA
@@ -214,53 +216,59 @@ class Castillo extends Phaser.Scene {
 
   update()
   {   
-      if (KeyW.isDown)
+
+    if (KeyV.isDown)
+    {
+      savedatabase();
+    }
+    
+    if (KeyW.isDown)
+    {
+        upMovement();
+        player.speed = 175;
+    }
+
+    else if(KeyS.isDown)
+    {
+        downMovement();
+        player.speed = 175;
+    }
+
+    else if(KeyA.isDown)
+    {
+        leftMovement();
+        player.speed = 175;
+    }
+
+    else if(KeyD.isDown)
+    {
+        rightMovement();
+        player.speed = 175;
+    }
+
+    else if(KeyP.isDown && !KeySpace.isDown)
+    {
+      player.speed = 400;
+      if (player.direccion == 1)
       {
-          upMovement();
-          player.speed = 175;
+        rollLeftMovement();
       }
 
-      else if(KeyS.isDown)
+      else if (player.direccion == 2)
       {
-          downMovement();
-          player.speed = 175;
+        rollUpMovement();
       }
 
-      else if(KeyA.isDown)
+      else if (player.direccion == 3)
       {
-          leftMovement();
-          player.speed = 175;
+        rollRightMovement();
       }
 
-      else if(KeyD.isDown)
+      else if (player.direccion == 4)
       {
-          rightMovement();
-          player.speed = 175;
+        rollDownMovement();
       }
-
-      else if(KeyP.isDown && !KeySpace.isDown)
-      {
-        player.speed = 400;
-        if (player.direccion == 1)
-        {
-          rollLeftMovement();
-        }
-
-        else if (player.direccion == 2)
-        {
-          rollUpMovement();
-        }
-
-        else if (player.direccion == 3)
-        {
-          rollRightMovement();
-        }
-
-        else if (player.direccion == 4)
-        {
-          rollDownMovement();
-        }
-      }
+    }
 
     else
     {
@@ -440,4 +448,35 @@ function changeCampo()
 this.scene.start("Campo");
 //this.scene.launch("Campo");
 this.scene.remove("Castillo");
+}
+
+function savedatabase()
+{
+  var directions = player.direccion;
+  var vida = vidas;
+  var positionx = player.x;
+  var positiony = player.y
+  
+  var urlllamada = 'http://localhost/CorruptedCastle/web/php/index.php';
+
+  xhr = new XMLHttpRequest();
+
+  xhr.open('POST', urlllamada);
+  xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+
+  // Acciones a procesar tras recibir la respuesta
+  xhr.onload = function xhrOnload()
+  {
+    if (xhr.status === 200) {
+      console.log('Respuesta recibida: ' + xhr.responseText);
+    }
+    else if (xhr.status !== 200) {
+      console.log('Algo ha fallado: ' + xhr.status);
+    }
+  }
+  // Envia datos al servidor php
+  datos = 'directions=' + directions + '&vida=' + vida + '&positionx=' + positionx + '&positiony=' + positiony;
+  // Debug
+  console.log(datos);
+  xhr.send(datos); 
 }
