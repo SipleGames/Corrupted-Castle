@@ -31,7 +31,8 @@ error_reporting(E_ALL);
   $pass = filter_input(INPUT_POST, "password", FILTER_SANITIZE_STRING);
 
   // respuesta en alerta
-  if ( $nombre != "" && $pass != "" ) {
+  if ( $nombre != "" && $pass != "" )
+  {
     $respuesta = login_bbdd($nombre, $pass);
 
     if ($respuesta == 1) {

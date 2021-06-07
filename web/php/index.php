@@ -7,8 +7,9 @@
     
     include("conexion.php");
 
+
     // aqui hace lo necesario para consultar o escribir en la base de datos
-    $sqlupdate = "UPDATE jugadores SET direccion = '$direccion', posicionx = '$posicwadionx', posiciony = '$posiciony', vida = '$vida' WHERE codigo = '3'";
+    $sqlupdate = "UPDATE jugadores SET direccion = '$direccion', posicionx = '$posicionx', posiciony = '$posiciony', vida = '$vida' WHERE codigo = '3'";
 
       if (mysqli_query($conn, $sqlupdate))
       {
@@ -36,20 +37,20 @@
   $positionx = filter_input(INPUT_POST, "positionx", FILTER_SANITIZE_STRING);
   $positiony = filter_input(INPUT_POST, "positiony", FILTER_SANITIZE_STRING);
 
-  $positionX = abs($positionx);
-  $positionY = abs($positiony);
+  //$positionX = abs($positionx);
+  //$positionY = abs($positiony);
 
 
   // respuesta en json
-  if ($direction != "" )
+  if ($direction != "" && $vida != "" && $positionx != "" && $positiony != "")
   {
       echo "<script> 
         alert('Parametros recibidos'); 
       </script>";
 
-    //$data = guardado_bbdd($vida, $direction, $positionX, $positionY);
+    $data = guardado_bbdd($vida, $direction, $positionx, $positiony);
     echo "<script> 
-        alert('Correcto'); 
+        alert('$data'); 
       </script>";
     exit;
   }

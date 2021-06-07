@@ -585,7 +585,7 @@ function savedatabase()
   var vida = vidas;
   var positionx = player.x;
   var positiony = player.y
-  var urlllamada = 'http://localhost/CorruptedCastle/web/php/saveDatos.php';
+  var urlllamada = 'http://localhost/CorruptedCastle/web/php/index.php';
 
   xhr = new XMLHttpRequest();
 
@@ -603,12 +603,11 @@ function savedatabase()
     }
   }
   // Envia datos al servidor php
-  datos = 'directions= ' + directions + 'vida=' + vida + 'positionx=' + positionx + 'positiony=' + positiony;
+  datos = 'directions=' + directions + '&vida=' + vida + '&positionx=' + positionx + '&positiony=' + positiony;
   // Debug
   console.log(datos);
   //var datoscodificados = encodeURI(datos);
   //console.log(datoscodificados)
-  xhr.send(datos);
-
+  xhr.send(datos); 
 }
 

@@ -3,7 +3,7 @@
   ini_set('display_errors', 1);
   error_reporting(E_ALL);
 
-   /*function guardado_bbdd($direccion)
+  function guardado_bbdd($direccion)
   {
     
     include("conexion.php");
@@ -20,7 +20,7 @@
         return "El guardadado ha fallado";
       }
       
-  }*/
+  }
 
 
 
@@ -42,7 +42,7 @@
 
 
   // respuesta en json
-  if ( $direction != "" )
+  if ( $direction != "" && $vida != "" && $positionx != "" && $positiony != "")
   {
       echo "<script> 
         alert('Parametros recibidos'); 
