@@ -17,6 +17,7 @@ var KeySpace;
 var KeyD;
 var KeyV;
 var KeyP;
+var KeyV;
 var KeyL, Key1, Key2, Key3, Key4, Key5;
 var arrowList;
 var enemyTauroList;
@@ -45,30 +46,30 @@ constructor()
 preload() {
 
   //Personaje
-    this.load.spritesheet('hero', 'assets/character/animMov.png', { frameWidth: 32, frameHeight: 32 });
-    this.load.spritesheet('roll', 'assets/character/Character_Roll.png',{ frameWidth: 32, frameHeight: 32 });
-    this.load.spritesheet('atack', 'assets/character/swordt.png', { frameWidth: 32, frameHeight: 32 });
+    this.load.spritesheet('hero', 'game/assets/character/animMov.png', { frameWidth: 32, frameHeight: 32 });
+    this.load.spritesheet('roll', 'game/assets/character/Character_Roll.png',{ frameWidth: 32, frameHeight: 32 });
+    this.load.spritesheet('atack', 'game/assets/character/swordt.png', { frameWidth: 32, frameHeight: 32 });
 
   //Enemigo
-    this.load.spritesheet('enemyTauro', 'assets/enemies/tauro.png', {frameWidth: 50, frameHeight: 72});
+    this.load.spritesheet('enemyTauro', 'game/assets/enemies/tauro.png', {frameWidth: 50, frameHeight: 72});
 
   //Mapa
-    this.load.image("tiles", 'assets/tiles/[Base]BaseChip_pipo16x16.png');
-    this.load.image("sombras", 'assets/tiles/[A]Wall-Up_Dungeon1_pipo.png');
-    this.load.tilemapTiledJSON("map", "assets/mapa/cueva.json");
-    this.load.image("portal", "assets/portal/portal.png");
+    this.load.image("tiles", 'game/assets/tiles/[Base]BaseChip_pipo16x16.png');
+    this.load.image("sombras", 'game/assets/tiles/[A]Wall-Up_Dungeon1_pipo.png');
+    this.load.tilemapTiledJSON("map", "game/assets/mapa/cueva.json");
+    this.load.image("portal", "game/assets/portal/portal.png");
 
   //Flechas
-    this.load.atlas('atlas', 'assets/arrow/arrow.png', 'assets/arrow/arrow.json');
+    this.load.atlas('atlas', 'game/assets/arrow/arrow.png', 'assets/arrow/arrow.json');
 
   //Inventario
-    this.load.image('pocion', 'assets/inventario/pocion.png');
-    this.load.image('manzana', 'assets/inventario/manzana.png');
-    this.load.image('inventory', 'assets/inventario/inventario.png');
+    this.load.image('pocion', 'game/assets/inventario/pocion.png');
+    this.load.image('manzana', 'game/assets/inventario/manzana.png');
+    this.load.image('inventory', 'game/assets/inventario/inventario.png');
 
   //Corazones
-    this.load.image('heart', 'assets/health/heart.png');
-    this.load.image('heartempty', 'assets/health/border.png')
+    this.load.image('heart', 'game/assets/health/heart.png');
+    this.load.image('heartempty', 'game/assets/health/border.png')
 }
 
 create() {
@@ -188,6 +189,8 @@ create() {
     Key4 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.FOUR);
     Key5 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.FIVE);
     KeyL = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.L);
+    KeyV = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.V);
+
 
 //Animaciones movimiento
      this.anims.create({
@@ -309,6 +312,13 @@ update(time, delta) {
     }
 
   }
+
+  //UPDATE BBDD
+   if (KeyV.isDown)
+    {
+      savedatabase();
+    }
+
 
   //Codigo caminar
 
@@ -673,7 +683,35 @@ function changeCampo()
   this.scene.start("Campo");
   this.scene.remove("Castillo");
   this.scene.remove("Cueva");
-  
-  
+}
 
+function savedatabase()
+{
+  var directions = player.direccion;
+  var vida = vidas;
+  var positionx = player.x;
+  var positiony = player.y
+
+  var urlllamada = 'http://localhost/CorruptedCastle/web/php/index.php';
+
+  xhr = new XMLHttpRequest();
+
+  xhr.open('POST', urlllamada);
+  xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+
+  // Acciones a procesar tras recibir la respuesta
+  xhr.onload = function xhrOnload()
+  {
+    if (xhr.status === 200) {
+      console.log('Respuesta recibida: ' + xhr.responseText);
+    }
+    else if (xhr.status !== 200) {
+      console.log('Algo ha fallado: ' + xhr.status);
+    }
+  }
+  // Envia datos al servidor php
+  datos = 'directions=' + directions + '&vida=' + vida + '&positionx=' + positionx + '&positiony=' + positiony;
+  // Debug
+  console.log(datos);
+  xhr.send(datos); 
 }

@@ -113,8 +113,8 @@ class Campo extends Phaser.Scene {
     
 
     //Colisiones
-    this.physics.add.overlap(arrowList, enemyTauroList, destroyEnemy, null, this);
-    this.physics.add.overlap(player, enemyTauroList, enemyDie, null, this);
+    this.physics.add.overlap(arrowList, enemyTauroList, destroyEnemies, null, this);
+    this.physics.add.overlap(player, enemyTauroList, enemyDies, null, this);
     this.physics.add.overlap(portalCastle, player, changeCastillo, null, this);
     this.physics.add.overlap(portalCave, player, changeCueva, null, this);
 
@@ -547,7 +547,7 @@ function enemyMovement()
   
 }
 
-function destroyEnemy(a, e)
+function destroyEnemies(a, e)
 {
   a.disableBody(true, true);
   e.disableBody(true, true);
@@ -557,7 +557,7 @@ function destroyEnemy(a, e)
   finOleada = finOleada - 1;
 }
 
-function enemyDie(p, e)
+function enemyDies(p, e)
 {
   if (vidas > 0)
   {
@@ -585,6 +585,7 @@ function savedatabase()
   var vida = vidas;
   var positionx = player.x;
   var positiony = player.y
+
   var urlllamada = 'http://localhost/CorruptedCastle/web/php/index.php';
 
   xhr = new XMLHttpRequest();
@@ -606,8 +607,5 @@ function savedatabase()
   datos = 'directions=' + directions + '&vida=' + vida + '&positionx=' + positionx + '&positiony=' + positiony;
   // Debug
   console.log(datos);
-  //var datoscodificados = encodeURI(datos);
-  //console.log(datoscodificados)
   xhr.send(datos); 
 }
-
