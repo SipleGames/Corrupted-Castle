@@ -642,7 +642,7 @@ function changeCastillo()
 
 function changeCueva()
 {
-  this.scene.start("Cueva");
+  window.location.assign("http://localhost/CorruptedCastle/web/cueva.html");
   this.scene.remove("Campo");
   this.scene.remove("Castillo");
 }

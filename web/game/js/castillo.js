@@ -88,7 +88,7 @@ class Castillo extends Phaser.Scene {
     enemyTauro.setSize(40);
     enemyTauro.speed = 100;
 
-    this.physics.add.overlap(portal, player, changeCampo, null, this);
+    this.physics.add.overlap(portal, player, changeToCampo, null, this);
 
 
     //Colisiones dibujadas
@@ -209,7 +209,7 @@ class Castillo extends Phaser.Scene {
         repeat: -1
       });
 
-      this.scene.add("Campo", new Campo); 
+      this.scene.add("Campo", new Campo);
 
   }
 
@@ -443,7 +443,7 @@ function arrowCreatorDown(){
   }
 }
 
-function changeCampo()
+function changeToCampo()
 {
 this.scene.start("Campo");
 //this.scene.launch("Campo");

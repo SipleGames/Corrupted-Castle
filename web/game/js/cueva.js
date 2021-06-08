@@ -74,16 +74,15 @@ preload() {
 }
 
 create() {
-  this.scene.add("Campo", new Campo); 
   //TILEMAP
   const map = this.make.tilemap({ key:"map" });
   const tileset = map.addTilesetImage("[Base]BaseChip_pipo16x16", "tiles");
   const sombra = map.addTilesetImage("[A]Wall-Up_Dungeon1_pipo", "sombras");
 
-  const Techo = map.createLayer("Top", tileset, 0, 0);
+  const Techo = map.createLayer("Techo", tileset, 0, 0);
   const Agujero = map.createLayer("Agujero", tileset, 0, 0);
   const Mundo = map.createLayer("World", tileset, 0, 0);
-  const Below = map.createLayer("Below", tileset, 0, 0);
+  const Below = map.createLayer("Suelo", tileset, 0, 0);
   Below.setDepth(-1);
   Mundo.setCollisionByProperty({ collides: true });
   Techo.setCollisionByProperty({ collides: true });
@@ -243,6 +242,28 @@ create() {
       frameRate: 10,
       repeat: -1
     });
+
+    //Animaciones idle
+    this.anims.create({
+        key: 'idleDown',
+        frames: [{ key: 'hero', frame: 0 }],
+        frameRate: 10
+      });
+      this.anims.create({
+        key: 'idleLeft',
+        frames: [{ key: 'hero', frame: 8 }],
+        frameRate: 10
+      });
+      this.anims.create({
+        key: 'idleUp',
+        frames: [{ key: 'hero', frame: 12 }],
+        frameRate: 10
+      });
+      this.anims.create({
+        key: 'idleRight',
+        frames: [{ key: 'hero', frame: 4 }],
+        frameRate: 10
+      });
 
 //Animaciones ataques
     this.anims.create({
@@ -680,9 +701,9 @@ function acaboboost()
 
 function changeCampo()
 {
-  this.scene.start("Campo");
+  window.location.assign("http://localhost/CorruptedCastle/web/game.html");
+  this.scene.remove("Campo");
   this.scene.remove("Castillo");
-  this.scene.remove("Cueva");
 }
 
 function savedatabase()
