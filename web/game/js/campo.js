@@ -41,6 +41,7 @@ class Campo extends Phaser.Scene {
     this.load.spritesheet('roll', 'game/assets/character/Character_Roll.png', {frameWidth: 32, frameHeight: 32});
     this.load.spritesheet('enemyTauro', 'game/assets/enemies/tauro.png', {frameWidth: 50, frameHeight: 72});
     this.load.spritesheet('enemyVolador', 'game/assets/enemies/volador.png', {frameWidth: 36, frameHeight: 50});
+    this.load.spritesheet('deathParticlesBlue', 'game/assets/particulas/deathParticlesBlue.png', {frameWidth: 128, frameHeight: 128});
 
 
     //Portal
@@ -50,7 +51,7 @@ class Campo extends Phaser.Scene {
   create(){
 
     this.scene.add("Castillo", new Castillo);
-    this.scene.add("Cueva", new Cueva);
+    //this.scene.add("Cueva", new Cueva);
     
     //Tilemap y colisiones
     const map = this.make.tilemap({ key: "map" });
@@ -273,9 +274,15 @@ class Campo extends Phaser.Scene {
         repeat: -1
       });
 
+  //Animacion particulas muerte
+  this.anims.create({
+    key: "enemyParticlesBlue",
+    frames: this.anims.generateFrameNumbers('deathParticlesBlue', {start: 0, end: 14}),
+  });
 
-      this.text = this.add.text(32, 32).setScrollFactor(0).setFontSize(16).setColor('#ffffff');
-      text = this.add.text(750, 32);
+
+    this.text = this.add.text(32, 32).setScrollFactor(0).setFontSize(16).setColor('#ffffff');
+    text = this.add.text(750, 32);
 
     //Valores para el reload
     contadorArrow = 0;
@@ -622,6 +629,11 @@ function destroyEnemies(a, e)
   arrowList.remove(a);
   enemyTauroList.remove(e);
 
+  particlesDeath = this.add.sprite(e.x, e.y, 'deathParticlesBlue');
+  particlesDeath.play('enemyParticlesBlue');
+
+
+
   finOleada = finOleada - 1;
 }
 
@@ -642,7 +654,7 @@ function changeCastillo()
 
 function changeCueva()
 {
-  this.scene.start("Cueva");
+  window.location.assign("http://localhost/CorruptedCastle/web/cueva.html");
   this.scene.remove("Campo");
   this.scene.remove("Castillo");
 }
