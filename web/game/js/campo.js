@@ -7,6 +7,7 @@ var KeyD;
 var KeyV;
 var KeyP;
 var KeyO;
+var Key1, Key2, Key3, Key3, Key4, Key5;
 var player;
 var arrowList;
 var enemyTauroList;
@@ -41,7 +42,10 @@ class Campo extends Phaser.Scene {
     this.load.spritesheet('roll', 'game/assets/character/Character_Roll.png', {frameWidth: 32, frameHeight: 32});
     this.load.spritesheet('enemyTauro', 'game/assets/enemies/tauro.png', {frameWidth: 50, frameHeight: 72});
     this.load.spritesheet('enemyVolador', 'game/assets/enemies/volador.png', {frameWidth: 36, frameHeight: 50});
+    this.load.spritesheet('deathParticlesBlue', 'game/assets/particulas/deathParticlesBlue.png', {frameWidth: 128, frameHeight: 128});
 
+    //Inventario
+    this.load.image('inventory', 'game/assets/inventario/inventario.png');
 
     //Portal
       this.load.image("portal", "game/assets/portal/portal.png");
@@ -50,7 +54,7 @@ class Campo extends Phaser.Scene {
   create(){
 
     this.scene.add("Castillo", new Castillo);
-    this.scene.add("Cueva", new Cueva);
+    //this.scene.add("Cueva", new Cueva);
     
     //Tilemap y colisiones
     const map = this.make.tilemap({ key: "map" });
@@ -84,6 +88,9 @@ class Campo extends Phaser.Scene {
     collidingTileColor: new Phaser.Display.Color(243, 134, 48, 255), // Color of colliding tiles
     faceColor: new Phaser.Display.Color(40, 39, 37, 255) // Color of colliding face edges
     });
+
+    //Inventario
+    inventory = this.add.image(690, 30, 'inventory').setScrollFactor(0)
 
     //Personaje principal
     player = this.physics.add.sprite(spawnPoint.x, spawnPoint.y, "hero");
@@ -138,6 +145,12 @@ class Campo extends Phaser.Scene {
     KeySpace=this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
     KeyV=this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.V);
     KeyO=this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.O);
+    //Teclas para inventario
+    Key1 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ONE);
+    Key2 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.TWO);
+    Key3 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.THREE);
+    Key4 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.FOUR);
+    Key5 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.FIVE);
 
     //Camara
     this.physics.world.setBounds(0, 0, 3200, 3200);
@@ -273,9 +286,15 @@ class Campo extends Phaser.Scene {
         repeat: -1
       });
 
+  //Animacion particulas muerte
+  this.anims.create({
+    key: "enemyParticlesBlue",
+    frames: this.anims.generateFrameNumbers('deathParticlesBlue', {start: 0, end: 14}),
+  });
 
-      this.text = this.add.text(32, 32).setScrollFactor(0).setFontSize(16).setColor('#ffffff');
-      text = this.add.text(750, 32);
+
+    this.text = this.add.text(32, 32).setScrollFactor(0).setFontSize(16).setColor('#ffffff');
+    text = this.add.text(750, 32);
 
     //Valores para el reload
     contadorArrow = 0;
@@ -622,6 +641,11 @@ function destroyEnemies(a, e)
   arrowList.remove(a);
   enemyTauroList.remove(e);
 
+  particlesDeath = this.add.sprite(e.x, e.y, 'deathParticlesBlue');
+  particlesDeath.play('enemyParticlesBlue');
+
+
+
   finOleada = finOleada - 1;
 }
 
@@ -642,7 +666,7 @@ function changeCastillo()
 
 function changeCueva()
 {
-  this.scene.start("Cueva");
+  window.location.assign("http://localhost/CorruptedCastle/web/cueva.html");
   this.scene.remove("Campo");
   this.scene.remove("Castillo");
 }
