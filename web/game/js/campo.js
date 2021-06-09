@@ -29,7 +29,8 @@ var emyMovLi;
 var vidas;
 var numPotions = 0;
 var numApples = 0;
-var numArrows = 0;
+var numArrows = 8;
+var enemyTauro;
 
 
 class Campo extends Phaser.Scene {
@@ -373,7 +374,6 @@ class Campo extends Phaser.Scene {
     }
     else
     {
-      player.speed = 175;
       if (player.direccion == 1)
       {
         idleLeft();
@@ -412,7 +412,7 @@ class Campo extends Phaser.Scene {
 
     if (KeySpace.isDown)
     {
-      if (contadorArrow == 0)
+      if (contadorArrow == 0 && numArrows > 0)
       {
         if (player.direccion == 1)
         {
@@ -431,12 +431,14 @@ class Campo extends Phaser.Scene {
           arrowCreatorDown();
         }
 
+        numArrows = numArrows - 1;
+
         contadorArrow = 1000;
       }
       
     }
 
-    if (KeyO.isDown)
+    if (KeyO.isDown && !KeyW.isDown && !KeyA.isDown && !KeyD.isDown && !KeyS.isDown)
     {
       if (player.direccion == 1)
       {
@@ -486,6 +488,7 @@ class Campo extends Phaser.Scene {
         }
       }
     }
+
     if (Casilla2)
     {
       if (Phaser.Input.Keyboard.JustDown(Key2))
@@ -497,29 +500,22 @@ class Campo extends Phaser.Scene {
           numApples = numApples - 1;
         }
         
-        if (numPotions == 0)
+        if (numApples == 0)
         {
-          Casilla1 = false;
-          potionsCasilla.destroy();
+          Casilla2 = false;
+          appleCasilla.destroy();
         }
       }
     }
-    /*if (Casilla3)
+
+    if (Casilla3)
     {
-      if (Phaser.Input.Keyboard.JustDown(Key1))
+      if (numArrows == 0)
       {
-        this.time.addEvent({delay: 6000, callback: potionEnds})
-        player.speed = 400;
-
-        numPotions = numPotions - 1;
-
-        if (numPotions == 0)
-        {
-          Casilla1 = false;
-          potionsCasilla.destroy();
-        }
+          Casilla3 = false;
+          arrowCasilla.destroy();
       }
-    }*/
+    }
 
 
     this.text.setText([
@@ -528,12 +524,11 @@ class Campo extends Phaser.Scene {
       'contadorArrow: ' + contadorArrow,
       'numTauro: ' + numTauro,
       'finOleada: ' + finOleada,
-      'randomX: ' + enemyTauro.x,
-      'randomY: ' + enemyTauro.y,
       'playerX: ' + player.x,
       'playerY: ' + player.y,
       'pociones: ' + numPotions,
-      'apples: ' + numApples
+      'apples: ' + numApples,
+      'arrows: ' + numArrows
     ]);
   }
 }
@@ -797,7 +792,7 @@ function takeArrow(pl, ar)
 
   numArrows = numArrows + 1;
 
-  if (numArrows)
+  if (numArrows == 8)
   {
     arrowCasilla = this.add.image(689, 35, 'arrow').setScrollFactor(0);
     arrowCasilla.setScale(0.20, 0.20);
