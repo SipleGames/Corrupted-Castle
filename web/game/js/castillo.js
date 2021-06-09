@@ -8,6 +8,7 @@ var KeyP;
 var KeyO;
 var Key1, Key2, Key3, Key3, Key4, Key5;
 var player;
+var npc1, npc2, npc3
 var arrowList;
 var enemyTauroList;
 var text;
@@ -56,6 +57,12 @@ class Castillo extends Phaser.Scene {
       //Enemigo
       this.load.spritesheet('enemyTauro', 'game/assets/enemies/tauro.png', {frameWidth: 50, frameHeight: 72});
       this.load.spritesheet('deathParticlesBlue', 'game/assets/particulas/deathParticlesBlue.png', {frameWidth: 128, frameHeight: 128});
+      
+      //NPCs
+      this.load.spritesheet("caballero1", "game/assets/npcs/tiles/Soldier/Soldier_01-1.png", {frameWidth: 32, frameHeight: 32});
+      this.load.spritesheet("caballero2", "game/assets/npcs/tiles/Soldier/Soldier_02-1.png", {frameWidth: 32, frameHeight: 32});
+      this.load.spritesheet("caballero3", "game/assets/npcs/tiles/Soldier/Soldier_03-1.png", {frameWidth: 32, frameHeight: 32});
+
       //Portal
       this.load.image("portal", "game/assets/portal/portal.png");
 
@@ -108,6 +115,34 @@ class Castillo extends Phaser.Scene {
     player.setSize(10,14);
     player.speed = 175;
     player.speedRoll = 400;
+
+    //NPCs
+    const NPC1 = map.findObject("NPC1", obj => obj.name === "NPC1");
+    npc1 = this.physics.add.sprite(NPC1.x, NPC1.y, "caballero1");
+
+    this.anims.create({
+        key: 'idleDownNPC1',
+        frames: [{ key: 'caballero1', frame: 1 }],
+        frameRate: 10
+      });
+
+    const NPC2 = map.findObject("NPC2", obj => obj.name === "NPC2");
+    npc2 = this.physics.add.sprite(NPC2.x, NPC2.y, "caballero2");
+
+    this.anims.create({
+        key: 'idleDownNPC2',
+        frames: [{ key: 'caballero2', frame: 1 }],
+        frameRate: 10
+      });
+
+    const NPC3 = map.findObject("NPC3", obj => obj.name === "NPC3");
+    npc3 = this.physics.add.sprite(NPC3.x, NPC3.y, "caballero3");
+
+    this.anims.create({
+        key: 'idleDownNPC3',
+        frames: [{ key: 'caballero3', frame: 1 }],
+        frameRate: 10
+      });
 
     //Portal
     const exit = map.findObject("Objects", obj => obj.name === "Exit");
@@ -170,19 +205,19 @@ class Castillo extends Phaser.Scene {
       KeyO=this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.O);
 
       //Teclas para inventario
-    Key1 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ONE);
-    Key2 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.TWO);
-    Key3 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.THREE);
-    Key4 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.FOUR);
-    Key5 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.FIVE);
+      Key1 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ONE);
+      Key2 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.TWO);
+      Key3 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.THREE);
+      Key4 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.FOUR);
+      Key5 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.FIVE);
       
 
-    //CAMARA
-    this.physics.world.setBounds(0, 0, 3200, 3200);
-    this.cameras.main.setBounds(0, 0, 3200, 3200);
+      //CAMARA
+      this.physics.world.setBounds(0, 0, 3200, 3200);
+      this.cameras.main.setBounds(0, 0, 3200, 3200);
 
-    this.cameras.main.startFollow(player);
-    player.setCollideWorldBounds(true);
+      this.cameras.main.startFollow(player);
+      player.setCollideWorldBounds(true);
 
     
 
@@ -812,7 +847,7 @@ function takeArrow(pl, ar)
 
 function potionEnds()
 {
-  player.speed = 175;
+  player.speed = 200;
 }
 
 function savedatabase()
