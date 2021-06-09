@@ -10,7 +10,7 @@ var KeyO;
 var Key1, Key2, Key3, Key3, Key4, Key5;
 var Casilla1 = false;
 var Casilla2 = false;
-var Casilla3 = false;
+var Casilla3 = true;
 var player;
 var arrowList;
 var enemyTauroList;
@@ -31,6 +31,7 @@ var numPotions = 0;
 var numApples = 0;
 var numArrows = 8;
 var enemyTauro;
+var arrowCasilla;
 
 
 class Campo extends Phaser.Scene {
@@ -103,7 +104,8 @@ class Campo extends Phaser.Scene {
     });
 
     //Inventario
-    inventory = this.add.image(690, 30, 'inventory').setScrollFactor(0)
+    inventory = this.add.image(690, 30, 'inventory').setScrollFactor(0);
+    inventory.setDepth(6);
 
     //Personaje principal
     player = this.physics.add.sprite(spawnPoint.x, spawnPoint.y, "hero");
@@ -333,7 +335,7 @@ class Campo extends Phaser.Scene {
 
     if (KeyV.isDown)
     {
-      savedatabase();
+      savedatabases();
     }
 
     if (KeyS.isDown)
@@ -354,7 +356,7 @@ class Campo extends Phaser.Scene {
     }
     else if (KeyP.isDown && !KeySpace.isDown)
     {
-      player.speed = 350;
+      player.speed = 300;
       if (player.direccion == 1)
       {
         rollLeftMovement();
@@ -514,6 +516,13 @@ class Campo extends Phaser.Scene {
       {
           Casilla3 = false;
           arrowCasilla.destroy();
+      }
+      else
+      {
+        arrowCasilla = this.add.image(689, 35, 'arrow').setScrollFactor(0);
+        arrowCasilla.setScale(0.20, 0.20);
+        arrowCasilla.setSize(10, 14);
+        arrowCasilla.setDepth(7);
       }
     }
 
@@ -718,7 +727,7 @@ function destroyEnemies(a, e)
   {
     apple = appleList.create(e.x, e.y, 'manzana');
   }
-  else if (randomNum == 5)
+  else if (randomNum == 5 || randomNum == 4)
   {
     collectArrow = collectArrowList.create(e.x, e.y, 'arrow');
     collectArrow.setScale(0.10, 0.10);
@@ -764,6 +773,7 @@ function takePotion(pl, po)
   {
     potionsCasilla = this.add.image(618, 35, 'pocion').setScrollFactor(0);
     potionsCasilla.setScale(2);
+    potionsCasilla.setDepth(7);
   }
   
   Casilla1 = true;
@@ -780,6 +790,7 @@ function takeApple(pl, ap)
   {
     appleCasilla = this.add.image(654, 35, 'manzana').setScrollFactor(0);
     appleCasilla.setScale(2);
+    appleCasilla.setDepth(7);
   }
   
   Casilla2 = true;
@@ -792,13 +803,6 @@ function takeArrow(pl, ar)
 
   numArrows = numArrows + 1;
 
-  if (numArrows == 8)
-  {
-    arrowCasilla = this.add.image(689, 35, 'arrow').setScrollFactor(0);
-    arrowCasilla.setScale(0.20, 0.20);
-    arrowCasilla.setSize(10, 14);
-  }
-
   Casilla3 = true;
 }
 
@@ -807,12 +811,18 @@ function potionEnds()
   player.speed = 175;
 }
 
-function savedatabase()
+function savedatabases()
 {
+  //Tabla jugador
   var directions = player.direccion;
   var vida = vidas;
   var positionx = player.x;
   var positiony = player.y
+
+  //Tabla inventario
+  var pociones = numPotions;
+  var manzanas = numApples;
+  var flechas = numArrows;
 
   var urlllamada = 'http://localhost/CorruptedCastle/web/php/index.php';
 
@@ -832,7 +842,7 @@ function savedatabase()
     }
   }
   // Envia datos al servidor php
-  datos = 'directions=' + directions + '&vida=' + vida + '&positionx=' + positionx + '&positiony=' + positiony;
+  datos = 'directions=' + directions + '&vida=' + vida + '&positionx=' + positionx + '&positiony=' + positiony + '&pociones=' + numPotions + '&manzanas=' + numApples + '&flechas=' + numArrows;
   // Debug
   console.log(datos);
   xhr.send(datos); 

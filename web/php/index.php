@@ -3,14 +3,16 @@
   ini_set('display_errors', 1);
   error_reporting(E_ALL);
 
-  function guardado_bbdd($vida, $direccion, $posicionx, $posiciony)
+  function guardado_jugadores_bbdd($vida, $direccion, $posicionx, $posiciony, $potions, $apples, $arrows)
   {
     
     include("conexion.php");
 
+    include("login.php");
+
 
     // aqui hace lo necesario para consultar o escribir en la base de datos
-    $sqlupdate = "UPDATE jugadores SET direccion = '$direccion', posicionx = '$posicionx', posiciony = '$posiciony', vida = '$vida' WHERE codigo = '3'";
+    $sqlupdate = "UPDATE jugadores SET direccion = '$direccion', posicionx = '$posicionx', posiciony = '$posiciony', vida = '$vida', pocion = '$potions', manzana = '$apples', flechas = '$arrows' WHERE codigo = '1'";
 
       if (mysqli_query($conn, $sqlupdate))
       {
@@ -38,22 +40,26 @@
   $positionx = filter_input(INPUT_POST, "positionx", FILTER_SANITIZE_STRING);
   $positiony = filter_input(INPUT_POST, "positiony", FILTER_SANITIZE_STRING);
 
+  $pociones = filter_input(INPUT_POST, "pociones", FILTER_SANITIZE_STRING);
+  $manzanas = filter_input(INPUT_POST, "manzanas", FILTER_SANITIZE_STRING);
+  $flechas = filter_input(INPUT_POST, "flechas", FILTER_SANITIZE_STRING);
+
   //$positionX = abs($positionx);
   //$positionY = abs($positiony);
 
 
   // respuesta en json
-  if ($direction != "" && $vida != "" && $positionx != "" && $positiony != "")
+  if ($direction != "" && $vida != "" && $positionx != "" && $positiony != "" && $pociones != "" && $manzanas != "" && $flechas != "")
   {
       echo "<script> 
         alert('Parametros recibidos'); 
       </script>";
 
-    $data = guardado_bbdd($vida, $direction, $positionx, $positiony);
+    $data = guardado_jugadores_bbdd($vida, $direction, $positionx, $positiony, $pociones, $manzanas, $flechas);
     echo "<script> 
         alert('$data'); 
       </script>";
-    exit;
+      exit;
   }
   else
   {
@@ -62,6 +68,9 @@
       </script>";
       exit;
   }
+
+ 
+
 ?>
 
 <html>

@@ -12,6 +12,7 @@ function getRegistred() {
 
 	var username = document.getElementsByName("username").value;
 	var password = document.getElementsByName("password").value;
+
 	var urlllamada = 'http://localhost/CorruptedCastle/web/php/newusser.php';
 
 	if (username.length > 0 && password.length > 0)
@@ -33,7 +34,7 @@ function getRegistred() {
 	    }
 		
 		// Envia datos al servidor php
-		var datos = 'username= ' + username + ' password= ' + password;
+		var datos = 'username= ' + username + '&password= ' + password;
 		// Debug
 		console.log(datos);
 		//var datoscodificados = encodeURI(datos);
@@ -46,6 +47,7 @@ function getLoged() {
 
 	var username = document.getElementsByName("username").value;
 	var password = document.getElementsByName("password").value;
+	
 	var urlllamada = 'http://localhost/CorruptedCastle/web/php/login.php';
 
 	if (username.length > 0 && password.length > 0)
@@ -68,7 +70,7 @@ function getLoged() {
 	    }
 		
 		// Envia datos al servidor php
-		var datos = 'Usuario= ' + username + ' Password= ' + password;
+		var datos = 'username= ' + username + ' &password= ' + password;
 		// Debug
 		console.log(datos);
 		//var datoscodificados = encodeURI(datos);

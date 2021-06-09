@@ -8,6 +8,7 @@ error_reporting(E_ALL);
     include("conexion.php");
 
     $query = mysqli_query($conn, "SELECT * FROM jugadores WHERE nombre_usuario = '".$usuario."' AND contrasena = '".$contrasenya."' ");
+
     $nr = mysqli_num_rows($query);
 
     if ($nr == 1) {
