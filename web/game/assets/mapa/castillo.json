@@ -148,17 +148,75 @@
         }, 
         {
          "draworder":"topdown",
-         "id":9,
-         "name":"Enemigos",
-         "objects":[],
+         "id":10,
+         "name":"NPC1",
+         "objects":[
+                {
+                 "height":0,
+                 "id":23,
+                 "name":"NPC1",
+                 "point":true,
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":2320,
+                 "y":2574
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "x":0,
+         "y":0
+        }, 
+        {
+         "draworder":"topdown",
+         "id":11,
+         "name":"NPC2",
+         "objects":[
+                {
+                 "height":0,
+                 "id":22,
+                 "name":"NPC2",
+                 "point":true,
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":914,
+                 "y":2572
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "x":0,
+         "y":0
+        }, 
+        {
+         "draworder":"topdown",
+         "id":12,
+         "name":"NPC3",
+         "objects":[
+                {
+                 "height":0,
+                 "id":21,
+                 "name":"NPC3",
+                 "point":true,
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":1552,
+                 "y":1138
+                }],
          "opacity":1,
          "type":"objectgroup",
          "visible":true,
          "x":0,
          "y":0
         }],
- "nextlayerid":10,
- "nextobjectid":20,
+ "nextlayerid":13,
+ "nextobjectid":24,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"2021.02.15",
