@@ -5,7 +5,7 @@ include("conexion.php");
 $nombre = $_POST["username"];
 $pass = $_POST["password"];
 
-$sqlgrabar = "INSERT INTO usuarios(nombre_usuario,contrasena) VALUES ('$nombre','$pass')";
+$sqlgrabar = "INSERT INTO jugadores(nombre_usuario,contrasena) VALUES ('$nombre','$pass')";
 
 if (mysqli_query($conn, $sqlgrabar))
 {
