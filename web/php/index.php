@@ -10,7 +10,7 @@
 
 
     // aqui hace lo necesario para consultar o escribir en la base de datos
-    $sqlupdate = "UPDATE jugadores SET direccion = '$direccion', posicionx = '$posicionx', posiciony = '$posiciony', vida = '$vida' WHERE codigo = '1'";
+    $sqlupdate = "UPDATE jugadores SET direccion = '$direccion', posicionx = '$posicionx', posiciony = '$posiciony', vida = '$vida' WHERE codigo = '3'";
 
       if (mysqli_query($conn, $sqlupdate))
       {
@@ -28,7 +28,7 @@
   header('Access-Control-Allow-Origin: ');
 
   // Comprobamos si se han recibido parámetros
-  if ( !isset( $HTTP_RAW_POST_DATA ) ) { 
+  if (!isset( $HTTP_RAW_POST_DATA ) ) { 
       $HTTP_RAW_POST_DATA = file_get_contents( 'php://input' );
   } 
 

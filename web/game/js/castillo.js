@@ -1,24 +1,34 @@
-var timerArrow;
-var text;
 var KeyA;
 var KeyW;
 var KeyS;
 var KeySpace;
 var KeyD;
-var KeyP;
-var KeyC;
 var KeyV;
+var KeyP;
+var KeyO;
+var Key1, Key2, Key3, Key3, Key4, Key5;
 var player;
-var enemyTauro;
-var enemyDown;
-var exit;
 var arrowList;
+var enemyTauroList;
+var text;
+var contadorArrow = 0;
+var contadorTauro = 0;
+var numTauro = 0;
+var contarTauro = numTauro;
+var finOleada = 0;
+var randomX;
+var randomY;
+var emyMovLi;
+var vidas;
+var exit;
+
 
 class Castillo extends Phaser.Scene {
 
   constructor() {
         super({key: "Castillo"});
   }
+
   preload()
   {      
       //Cargar mapa
@@ -31,19 +41,27 @@ class Castillo extends Phaser.Scene {
       //Personaje
       this.load.spritesheet('hero', 'game/assets/character/animMov.png', {frameWidth: 32, frameHeight: 32});
       this.load.spritesheet('roll', 'game/assets/character/Character_Roll.png', {frameWidth: 32, frameHeight: 32});
+      this.load.spritesheet('atack', 'game/assets/character/swordt.png', { frameWidth: 32, frameHeight: 32 });
 
       //Enemigo
       this.load.spritesheet('enemyTauro', 'game/assets/enemies/tauro.png', {frameWidth: 50, frameHeight: 72});
-      this.load.spritesheet('enemyVolador', 'game/assets/enemies/volador.png', {frameWidth: 36,frameHeight: 50});
 
       //Portal
       this.load.image("portal", "game/assets/portal/portal.png");
+
+
+      //Inventario
+      this.load.image('inventory', 'game/assets/inventario/inventario.png');
   }
 
 
   create()
   {
-    text = this.add.text(32);
+
+    //Inventario
+    inventory = this.add.image(690, 30, 'inventory').setScrollFactor(0)
+    inventory.setDepth(1);
+   
     //Tiled
       const map = this.make.tilemap({ key: "mapa" });
       const tileset = map.addTilesetImage("[Base]BaseChip_pipo", "tiles");
@@ -52,9 +70,9 @@ class Castillo extends Phaser.Scene {
       const worldLayer = map.createLayer("top", tileset);
       const aboveLayer = map.createLayer("superficie", tileset);
 
-      belowLayer.setDepth(-1);
+      belowLayer.setDepth(-2);
       worldLayer.setCollisionByProperty({collides:true});
-      aboveLayer.setDepth(1);
+      aboveLayer.setDepth(-1);
 
    
     //Player
@@ -77,16 +95,18 @@ class Castillo extends Phaser.Scene {
 
     this.physics.add.collider(worldLayer, player);
 
-    //Flechas
+    //Grupos
     arrowList = this.physics.add.group();
+    enemyTauroList = this.physics.add.group();
 
-    //Enemigo prueba
-    enemyTauro = this.physics.add.sprite(spawnPoint.x, spawnPoint.y, "enemyTauro");
-    enemyTauro.setOrigin(0.5);
-    enemyTauro.setScale(0.5);
-    enemyTauro.direccion = 0;
-    enemyTauro.setSize(40);
-    enemyTauro.speed = 100;
+
+    //Colides
+    this.physics.add.overlap(arrowList, enemyTauroList, destroyEnemies, null, this);
+    this.physics.add.overlap(player, enemyTauroList, enemyDies, null, this);
+
+    this.physics.add.collider(belowLayer, enemyTauroList);
+    this.physics.add.collider(worldLayer, enemyTauroList);
+    this.physics.add.collider(aboveLayer, enemyTauroList);
 
     this.physics.add.overlap(portal, player, changeToCampo, null, this);
 
@@ -107,7 +127,7 @@ class Castillo extends Phaser.Scene {
     });*/
 
 
-    //TECLAS
+    ///TECLAS
 
       KeyW=this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
       KeyS=this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
@@ -116,10 +136,17 @@ class Castillo extends Phaser.Scene {
       KeyP=this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.P);
       KeySpace=this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
       KeyV=this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.V);
+      KeyO=this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.O);
+
+      //Teclas para inventario
+    Key1 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ONE);
+    Key2 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.TWO);
+    Key3 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.THREE);
+    Key4 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.FOUR);
+    Key5 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.FIVE);
       
 
     //CAMARA
-
     this.physics.world.setBounds(0, 0, 3200, 3200);
     this.cameras.main.setBounds(0, 0, 3200, 3200);
 
@@ -200,6 +227,52 @@ class Castillo extends Phaser.Scene {
         repeat: -1
       });
 
+      //Animaciones ataques
+    this.anims.create({
+      key: 'atackdown',
+      frames: this.anims.generateFrameNumbers('atack', {start: 0, end: 4}),
+      frameRate: 10,
+      repeat: -1
+    });
+    this.anims.create({
+      key: 'atackright',
+      frames: this.anims.generateFrameNumbers('atack', {start: 5, end: 9}),
+      frameRate: 10,
+      repeat: -1
+    });
+    this.anims.create({
+      key: 'atackleft',
+      frames: this.anims.generateFrameNumbers('atack', {start: 10, end: 14}),
+      frameRate: 10,
+      repeat: -1
+    });
+    this.anims.create({
+      key: 'atackup',
+      frames: this.anims.generateFrameNumbers('atack', {start: 15, end: 19}),
+      frameRate: 10,
+      repeat: -1
+    });
+
+  //Animacion Enemigo
+  this.anims.create({
+      key: 'tauroleft',
+      frames: this.anims.generateFrameNumbers('enemyTauro', {start: 4, end: 7}),
+      frameRate: 10,
+      repeat: -1
+    });
+  this.anims.create({
+      key: 'tauroright',
+      frames: this.anims.generateFrameNumbers('enemyTauro', {start: 8, end: 11}),
+      frameRate: 10,
+      repeat: -1
+    });
+  this.anims.create({
+      key: 'tauroup',
+      frames: this.anims.generateFrameNumbers('enemyTauro', {start: 12, end: 15}),
+      frameRate: 10,
+      repeat: -1
+    });
+
 
       //Animacion enemigos a mele
       this.anims.create({
@@ -209,7 +282,24 @@ class Castillo extends Phaser.Scene {
         repeat: -1
       });
 
-      this.scene.add("Campo", new Campo);
+
+      //texto
+      this.text = this.add.text(32, 32).setScrollFactor(0).setFontSize(16).setColor('#ffffff');
+      text = this.add.text(750, 32);
+
+      //CAMPO
+      this.scene.add("Campo", new Campo); 
+
+       //Valores para el reload
+    contadorArrow = 0;
+    contadorTauro = 0;
+    numTauro = 0;
+    vidas = 3;
+    contarTauro = numTauro;
+    finOleada = 0;
+    randomX;
+    randomY;
+
 
   }
 
@@ -291,6 +381,23 @@ class Castillo extends Phaser.Scene {
       player.setVelocity(0);
     }
 
+
+    if (finOleada == 0)
+    {
+      if (contadorTauro == 0)
+      {
+        enemyDownCreation();
+      }
+    }
+
+    for (i = 0; i < enemyTauroList.getChildren().length; i++)
+        {
+          emyMovLi = enemyTauroList.getChildren()[i];
+          emyMovLi.anims.play('enemyDown', true);
+
+          this.physics.moveTo(emyMovLi, player.x, player.y, 150);
+        }
+
     if (KeySpace.isDown)
     {
       if (contadorArrow == 0)
@@ -316,13 +423,49 @@ class Castillo extends Phaser.Scene {
       }
     }
 
+     if (KeyO.isDown)
+    {
+      if (player.direccion == 1)
+      {
+        atackLeft();
+      }
+      else if (player.direccion == 2)
+      {
+        atackUp();
+      }
+      else if (player.direccion == 3)
+      {
+        atackRight();
+      }
+      else if (player.direccion == 4)
+      {
+        atackDown();
+      }
+    }
+
     if (contadorArrow > 0)
     {
       contadorArrow = contadorArrow - 25;
     }
+
+     if (contadorTauro > 0)
+    {
+      contadorTauro = contadorTauro - 25;
+    }
     player.body.velocity.normalize().scale(player.speed);
 
- 
+    this.text.setText([
+      'vidas: ' + vidas,
+      'contadorTauro: ' + contadorTauro,
+      'contadorArrow: ' + contadorArrow,
+      'numTauro: ' + numTauro,
+      'finOleada: ' + finOleada,
+     //'randomX: ' + enemyTauro.x,
+     //'randomY: ' + enemyTauro.y,
+      'playerX: ' + player.x,
+      'playerY: ' + player.y
+    ]);
+
   
   }
 }
@@ -442,6 +585,59 @@ function arrowCreatorDown(){
    arrow.setVelocityY(arrow.speed);
   }
 }
+
+function enemyDownCreation()
+{
+  finOleada = numTauro;
+
+  for (i = 0; i < numTauro; i++)
+  {
+    randomX = Phaser.Math.Between(0, 3128);
+    randomY = Phaser.Math.Between(0, 3157);
+    enemyTauro = enemyTauroList.create(randomX, randomY, "enemyTauro");
+    enemyTauro.setOrigin(0.5, 0.5);
+    enemyTauro.setScale(0.55, 0.55);
+    enemyTauro.direccion = 0;
+    enemyTauro.setSize(40);
+    enemyTauro.speed = 1;
+  }
+  contadorTauro = 1000;
+  numTauro = numTauro + 1;
+}
+
+function enemyMovement()
+{
+  
+    for (i = 0; i < enemyTauroList.getChildren().length; i++)
+  {
+    emyMovLi = enemyTauroList.getChildren()[i];
+
+    this.physics.moveTo(emyMovLi, player.x, player.y, emyMovLi.speed, 10);
+  
+  }
+  
+}
+
+function destroyEnemies(a, e)
+{
+  a.disableBody(true, true);
+  e.disableBody(true, true);
+  arrowList.remove(a);
+  enemyTauroList.remove(e);
+
+  finOleada = finOleada - 1;
+}
+
+function enemyDies(p, e)
+{
+  if (vidas > 0)
+  {
+    vidas = vidas - 1;
+  }
+}
+
+
+
 
 function changeToCampo()
 {
