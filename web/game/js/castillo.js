@@ -25,6 +25,7 @@ var exit;
 var Casilla1 = false;
 var Casilla2 = false;
 var Casilla3 = false;
+var Casilla4 = false;
 var numPotions = 0;
 var numApples = 0;
 var numArrows = 0;
@@ -32,6 +33,8 @@ var potionsList;
 var appleList;
 var collectArrowList;
 var chestsObj;
+var numLlaves = 0;
+var llavesList;
 
 
 class Castillo extends Phaser.Scene {
@@ -72,6 +75,7 @@ class Castillo extends Phaser.Scene {
       this.load.image('pocion', 'game/assets/inventario/pocion.png');
       this.load.image('manzana', 'game/assets/inventario/manzana.png');
       this.load.image('arrow', 'game/assets/inventario/left.png');
+      this.load.image("llave", "game/assets/inventario/keyFragment.png");
   }
 
 
@@ -159,6 +163,7 @@ class Castillo extends Phaser.Scene {
     potionsList = this.physics.add.group();
     appleList = this.physics.add.group();
     collectArrowList = this.physics.add.group();
+    llavesList = this.physics.add.group();
 
 
     //Colides
@@ -167,9 +172,8 @@ class Castillo extends Phaser.Scene {
     this.physics.add.overlap(player, potionsList, takePotion, null, this);
     this.physics.add.overlap(player, appleList, takeApple, null, this);
     this.physics.add.overlap(player, collectArrowList, takeArrow, null, this);
+    this.physics.add.overlap(player, llavesList, takeKey, null, this);
 
-
-    this.physics.add.collider(player, chests);
     this.physics.add.collider(belowLayer, enemyTauroList);
     this.physics.add.collider(worldLayer, enemyTauroList);
     this.physics.add.collider(aboveLayer, enemyTauroList);
@@ -567,24 +571,32 @@ class Castillo extends Phaser.Scene {
       }
     }
 
-    /*if (Casilla3)
+     if (Casilla3)
     {
-      if (Phaser.Input.Keyboard.JustDown(Key3))
+      if (numArrows == 0)
       {
-        if (vidas != 3 && numApples > 0)
-        {
-          vidas = vidas + 1;
+          Casilla3 = false;
+          arrowCasilla.destroy();
+      }
+    }
 
-          numApples = numApples - 1;
-        }
-        
-        if (numPotions == 0)
+    if (Casilla4)
+    {
+      if (Phaser.Input.Keyboard.JustDown(Key4))
+      {
+
+        if (numLlaves > 0)
         {
-          Casilla1 = false;
-          potionsCasilla.destroy();
+          numLlaves = numLlaves - 1;
+        }
+
+        if (numLlaves == 0)
+        {
+          Casilla4 = false;
+          llavesCasilla.destroy();
         }
       }
-    }*/
+    }
 
 
     this.text.setText([
@@ -594,7 +606,8 @@ class Castillo extends Phaser.Scene {
      //'randomX: ' + enemyTauro.x,
      //'randomY: ' + enemyTauro.y,
       'playerX: ' + player.x,
-      'playerY: ' + player.y
+      'playerY: ' + player.y,
+
     ]);
 
   
@@ -756,12 +769,18 @@ function destroyEnemies(a, e)
   arrowList.remove(a);
   enemyTauroList.remove(e);
 
-  randomNum = Math.floor(Math.random() * 6) + 1;
+  randomNum = Math.floor(Math.random() * 6) + 12;
 
   if (randomNum == 1)
   {
     potions = potionsList.create(e.x, e.y, 'pocion');
   }
+
+  else if (randomNumero == 2)
+  {
+    llaves = llavesList.create(e.x, e.y, 'keyFragment');
+  }
+  
   else if (randomNum == 3)
   {
     apple = appleList.create(e.x, e.y, 'manzana');
@@ -771,6 +790,12 @@ function destroyEnemies(a, e)
     collectArrow = collectArrowList.create(e.x, e.y, 'arrow');
     collectArrow.setScale(0.10, 0.10);
   }
+
+  else if (randomNumero == 2)
+  {
+    llaves = llavesList.create(e.x, e.y, 'keyFragment');
+  }
+
 
   particlesDeath = this.add.sprite(e.x, e.y, 'deathParticlesBlue');
   particlesDeath.play('enemyParticlesBlue');
@@ -810,6 +835,22 @@ function takePotion(pl, po)
   }
   
   Casilla1 = true;
+}
+
+function takeKey(pl, ll)
+{
+  ll.disableBody(true, true);
+  llavesList.remove(ll);
+
+  numLlaves = numLlaves + 1;
+
+  if (numLLaves == 1)
+  {
+    llavesCasilla = this.add.image(725, 35, 'keyFragment').setScrollFactor(0);
+    lLavesCasilla.setScale(2);
+  }
+  
+  Casilla4 = true;
 }
 
 function takeApple(pl, ap)
