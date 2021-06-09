@@ -113,7 +113,7 @@ create() {
     {
     /*Phaser.Math.Between(0, Mundo.width), Phaser.Math.Between(0, Mundo.height)*/
       tauro = tauros.create(200, 200, 'Tauro2');
-      tauro.setScale(0.6);
+      tauro.setScale(0.6,0.6);
       tauro.velocidad = 60;  
       tauro.patrolCircle = new Phaser.Geom.Circle(0, 0, 256);
       tauro.direccion = -1;
@@ -140,7 +140,6 @@ create() {
   this.physics.add.collider(arrowList, Mundo);
   this.physics.add.collider(Mundo, player);
   this.physics.add.overlap(player, tauro, shake, null, this);
-  ;
   this.physics.add.overlap(arrowList, tauros, enemyDie, null, this);
 
   this.physics.add.overlap(player, potion, llevarinv, null, this);
@@ -151,7 +150,7 @@ create() {
   
 
   //CAMARA
-	this.cameras.main.setBounds(0, 0, 1600, 1600);
+	this.cameras.main.setBounds(0, 0, 3200, 3200);
   this.cameras.main.startFollow(player);
 
 

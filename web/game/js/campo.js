@@ -8,9 +8,15 @@ var KeyV;
 var KeyP;
 var KeyO;
 var Key1, Key2, Key3, Key3, Key4, Key5;
+var Casilla1 = false;
+var Casilla2 = false;
+var Casilla3 = false;
 var player;
 var arrowList;
 var enemyTauroList;
+var potionsList;
+var appleList;
+var collectArrowList;
 var text;
 var contadorArrow = 0;
 var contadorTauro = 0;
@@ -21,6 +27,9 @@ var randomX;
 var randomY;
 var emyMovLi;
 var vidas;
+var numPotions = 0;
+var numApples = 0;
+var numArrows = 0;
 
 
 class Campo extends Phaser.Scene {
@@ -46,6 +55,9 @@ class Campo extends Phaser.Scene {
 
     //Inventario
     this.load.image('inventory', 'game/assets/inventario/inventario.png');
+    this.load.image('pocion', 'game/assets/inventario/pocion.png');
+    this.load.image('manzana', 'game/assets/inventario/manzana.png');
+    this.load.image('arrow', 'game/assets/inventario/left.png');
 
     //Portal
       this.load.image("portal", "game/assets/portal/portal.png");
@@ -118,6 +130,9 @@ class Campo extends Phaser.Scene {
     //Grupos
     arrowList = this.physics.add.group();
     enemyTauroList = this.physics.add.group();
+    potionsList = this.physics.add.group();
+    appleList = this.physics.add.group();
+    collectArrowList = this.physics.add.group();
     
 
     //Colisiones
@@ -125,6 +140,9 @@ class Campo extends Phaser.Scene {
     this.physics.add.overlap(player, enemyTauroList, enemyDies, null, this);
     this.physics.add.overlap(portalCastle, player, changeCastillo, null, this);
     this.physics.add.overlap(portalCave, player, changeCueva, null, this);
+    this.physics.add.overlap(player, potionsList, takePotion, null, this);
+    this.physics.add.overlap(player, appleList, takeApple, null, this);
+    this.physics.add.overlap(player, collectArrowList, takeArrow, null, this);
 
     //Colision Medio player
     this.physics.add.collider(Medio, player);
@@ -320,26 +338,22 @@ class Campo extends Phaser.Scene {
     if (KeyS.isDown)
     {
       downMovement();
-      player.speed = 175;
     }
     else if (KeyW.isDown)
     {
       upMovement();
-      player.speed = 175;
     }
     else if (KeyD.isDown)
     {
       rightMovement();
-      player.speed = 175;
     }
     else if (KeyA.isDown)
     {
       leftMovement();
-      player.speed = 175;
     }
     else if (KeyP.isDown && !KeySpace.isDown)
     {
-      player.speed = 400;
+      player.speed = 350;
       if (player.direccion == 1)
       {
         rollLeftMovement();
@@ -359,6 +373,7 @@ class Campo extends Phaser.Scene {
     }
     else
     {
+      player.speed = 175;
       if (player.direccion == 1)
       {
         idleLeft();
@@ -451,6 +466,61 @@ class Campo extends Phaser.Scene {
     }
     player.body.velocity.normalize().scale(player.speed);
 
+    //Interaciones con inventario
+    if (Casilla1)
+    {
+      if (Phaser.Input.Keyboard.JustDown(Key1))
+      {
+        this.time.addEvent({delay: 6000, callback: potionEnds})
+        player.speed = 400;
+
+        if (numPotions > 0)
+        {
+          numPotions = numPotions - 1;
+        }
+
+        if (numPotions == 0)
+        {
+          Casilla1 = false;
+          potionsCasilla.destroy();
+        }
+      }
+    }
+    if (Casilla2)
+    {
+      if (Phaser.Input.Keyboard.JustDown(Key2))
+      {
+        if (vidas != 3 && numApples > 0)
+        {
+          vidas = vidas + 1;
+
+          numApples = numApples - 1;
+        }
+        
+        if (numPotions == 0)
+        {
+          Casilla1 = false;
+          potionsCasilla.destroy();
+        }
+      }
+    }
+    /*if (Casilla3)
+    {
+      if (Phaser.Input.Keyboard.JustDown(Key1))
+      {
+        this.time.addEvent({delay: 6000, callback: potionEnds})
+        player.speed = 400;
+
+        numPotions = numPotions - 1;
+
+        if (numPotions == 0)
+        {
+          Casilla1 = false;
+          potionsCasilla.destroy();
+        }
+      }
+    }*/
+
 
     this.text.setText([
       'vidas: ' + vidas,
@@ -461,7 +531,9 @@ class Campo extends Phaser.Scene {
       'randomX: ' + enemyTauro.x,
       'randomY: ' + enemyTauro.y,
       'playerX: ' + player.x,
-      'playerY: ' + player.y
+      'playerY: ' + player.y,
+      'pociones: ' + numPotions,
+      'apples: ' + numApples
     ]);
   }
 }
@@ -549,7 +621,7 @@ function arrowCreatorLeft()
     arrow = arrowList.create(player.x, player.y, 'atlas', 'left');
     arrow.setScale(0.10, 0.10);
     arrow.setOrigin(0.5, 0.5);
-    arrow.speed = 250;
+    arrow.speed = 400;
     arrow.setDepth(-1);
     arrow.setSize(10,14);
 
@@ -564,7 +636,7 @@ function arrowCreatorUp()
     arrow = arrowList.create(player.x, player.y, 'atlas', 'up');
     arrow.setScale(0.10, 0.10);
     arrow.setOrigin(0.5, 0.5);
-    arrow.speed = 250;
+    arrow.speed = 400;
     arrow.setDepth(-1);
     arrow.setSize(10,14);
 
@@ -579,7 +651,7 @@ function arrowCreatorRight()
     arrow = arrowList.create(player.x, player.y, 'atlas', 'right');
     arrow.setScale(0.10, 0.10);
     arrow.setOrigin(0.5, 0.5);
-    arrow.speed = 250;
+    arrow.speed = 400;
     arrow.setDepth(-1);
     arrow.setSize(10,14);
 
@@ -594,7 +666,7 @@ function arrowCreatorDown()
     arrow = arrowList.create(player.x, player.y, 'atlas', 'down');
     arrow.setScale(0.10, 0.10);
     arrow.setOrigin(0.5, 0.5);
-    arrow.speed = 250;
+    arrow.speed = 400;
     arrow.setDepth(-1);
     arrow.setSize(10,14);
 
@@ -618,7 +690,7 @@ function enemyDownCreation()
     enemyTauro.speed = 1;
   }
   contadorTauro = 1000;
-  numTauro = numTauro + 1;
+  numTauro = numTauro + 2;
 }
 
 function enemyMovement()
@@ -641,6 +713,22 @@ function destroyEnemies(a, e)
   arrowList.remove(a);
   enemyTauroList.remove(e);
 
+  randomNum = Math.floor(Math.random() * 6) + 1;
+
+  if (randomNum == 1)
+  {
+    potions = potionsList.create(e.x, e.y, 'pocion');
+  }
+  else if (randomNum == 3)
+  {
+    apple = appleList.create(e.x, e.y, 'manzana');
+  }
+  else if (randomNum == 5)
+  {
+    collectArrow = collectArrowList.create(e.x, e.y, 'arrow');
+    collectArrow.setScale(0.10, 0.10);
+  }
+
   particlesDeath = this.add.sprite(e.x, e.y, 'deathParticlesBlue');
   particlesDeath.play('enemyParticlesBlue');
 
@@ -661,7 +749,6 @@ function changeCastillo()
 {
   this.scene.start("Castillo");
   this.scene.remove("Campo");
-  this.scene.remove("Cueva");
 }
 
 function changeCueva()
@@ -669,6 +756,60 @@ function changeCueva()
   window.location.assign("http://localhost/CorruptedCastle/web/cueva.html");
   this.scene.remove("Campo");
   this.scene.remove("Castillo");
+}
+
+function takePotion(pl, po)
+{
+  po.disableBody(true, true);
+  potionsList.remove(po);
+
+  numPotions = numPotions + 1;
+
+  if (numPotions == 1)
+  {
+    potionsCasilla = this.add.image(618, 35, 'pocion').setScrollFactor(0);
+    potionsCasilla.setScale(2);
+  }
+  
+  Casilla1 = true;
+}
+
+function takeApple(pl, ap)
+{
+  ap.disableBody(true, true);
+  appleList.remove(ap);
+
+  numApples = numApples + 1;
+
+  if (numApples == 1)
+  {
+    appleCasilla = this.add.image(654, 35, 'manzana').setScrollFactor(0);
+    appleCasilla.setScale(2);
+  }
+  
+  Casilla2 = true;
+}
+
+function takeArrow(pl, ar)
+{
+  ar.disableBody(true, true);
+  collectArrowList.remove(ar);
+
+  numArrows = numArrows + 1;
+
+  if (numArrows)
+  {
+    arrowCasilla = this.add.image(689, 35, 'arrow').setScrollFactor(0);
+    arrowCasilla.setScale(0.20, 0.20);
+    arrowCasilla.setSize(10, 14);
+  }
+
+  Casilla3 = true;
+}
+
+function potionEnds()
+{
+  player.speed = 175;
 }
 
 function savedatabase()
