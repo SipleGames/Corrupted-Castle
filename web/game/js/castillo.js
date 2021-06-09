@@ -28,7 +28,7 @@ var Casilla3 = false;
 var Casilla4 = false;
 var numPotions = 0;
 var numApples = 0;
-var numArrows = 0;
+var numArrows = 8;
 var potionsList;
 var appleList;
 var collectArrowList;
@@ -101,11 +101,11 @@ class Castillo extends Phaser.Scene {
       aboveLayer.setDepth(0);
 
       //chests
-    const chests = this.physics.add.staticGroup();
+    /*const chests = this.physics.add.staticGroup();
     const chestsLayer = map.getObjectLayer("Chests");
     chestsLayer.objects.forEach(chestObj => {
      
-    });
+    });*/
 
    
     //Player
@@ -476,7 +476,7 @@ class Castillo extends Phaser.Scene {
 
     if (KeySpace.isDown)
     {
-      if (contadorArrow == 0)
+      if (contadorArrow == 0 && numArrows > 0)
       {
         if (player.direccion == 1)
         {
@@ -494,6 +494,8 @@ class Castillo extends Phaser.Scene {
         {
           arrowCreatorDown();
         }
+
+        numArrows= numArrows - 1;
 
         contadorArrow = 1000;
       }
@@ -578,23 +580,27 @@ class Castillo extends Phaser.Scene {
           Casilla3 = false;
           arrowCasilla.destroy();
       }
+      else
+      {
+        arrowCasilla = this.add.image(689, 35, 'arrow').setScrollFactor(0);
+        arrowCasilla.setScale(0.20, 0.20);
+        arrowCasilla.setSize(10, 14);
+        arrowCasilla.setDepth(7);
+      }
     }
 
     if (Casilla4)
     {
-      if (Phaser.Input.Keyboard.JustDown(Key4))
+      if(numLlaves == 0)
       {
+        Casilla3 = false;
+        lLavesCasilla.destroy();
+      }
 
-        if (numLlaves > 0)
-        {
-          numLlaves = numLlaves - 1;
-        }
-
-        if (numLlaves == 0)
-        {
-          Casilla4 = false;
-          llavesCasilla.destroy();
-        }
+      if(Phaser.Inpu.Keyboard.JustDown(Key4))
+      {
+         player.x = 100;
+         player.y = 100;
       }
     }
 
@@ -769,7 +775,7 @@ function destroyEnemies(a, e)
   arrowList.remove(a);
   enemyTauroList.remove(e);
 
-  randomNum = Math.floor(Math.random() * 6) + 12;
+  randomNum = Math.floor(Math.random() * 6) + 1;
 
   if (randomNum == 1)
   {
@@ -790,12 +796,6 @@ function destroyEnemies(a, e)
     collectArrow = collectArrowList.create(e.x, e.y, 'arrow');
     collectArrow.setScale(0.10, 0.10);
   }
-
-  else if (randomNumero == 2)
-  {
-    llaves = llavesList.create(e.x, e.y, 'keyFragment');
-  }
-
 
   particlesDeath = this.add.sprite(e.x, e.y, 'deathParticlesBlue');
   particlesDeath.play('enemyParticlesBlue');
@@ -876,13 +876,6 @@ function takeArrow(pl, ar)
 
   numArrows = numArrows + 1;
 
-  if (numArrows)
-  {
-    arrowCasilla = this.add.image(689, 35, 'arrow').setScrollFactor(0);
-    arrowCasilla.setScale(0.20, 0.20);
-    arrowCasilla.setSize(10, 14);
-  }
-
   Casilla3 = true;
 }
 
@@ -893,11 +886,17 @@ function potionEnds()
 
 function savedatabase()
 {
+   //Tabla jugador
   var directions = player.direccion;
   var vida = vidas;
   var positionx = player.x;
   var positiony = player.y
-  
+
+  //Tabla inventario
+  var pociones = numPotions;
+  var manzanas = numApples;
+  var flechas = numArrows;
+
   var urlllamada = 'http://localhost/CorruptedCastle/web/php/index.php';
 
   xhr = new XMLHttpRequest();
@@ -916,7 +915,7 @@ function savedatabase()
     }
   }
   // Envia datos al servidor php
-  datos = 'directions=' + directions + '&vida=' + vida + '&positionx=' + positionx + '&positiony=' + positiony;
+  datos = 'directions=' + directions + '&vida=' + vida + '&positionx=' + positionx + '&positiony=' + positiony + '&pociones=' + numPotions + '&manzanas=' + numApples + '&flechas=' + numArrows;
   // Debug
   console.log(datos);
   xhr.send(datos); 
