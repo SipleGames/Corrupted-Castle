@@ -3,7 +3,7 @@
   ini_set('display_errors', 1);
   error_reporting(E_ALL);
 
-  function guardado_jugadores_bbdd($vida, $direccion, $posicionx, $posiciony, $potions, $apples, $arrows)
+  function guardado_jugadores_bbdd($vida, $direccion, $posicionx, $posiciony, $potions, $apples, $arrows, $llaves)
   {
     
     include("conexion.php");
@@ -12,7 +12,7 @@
 
 
     // aqui hace lo necesario para consultar o escribir en la base de datos
-    $sqlupdate = "UPDATE jugadores SET direccion = '$direccion', posicionx = '$posicionx', posiciony = '$posiciony', vida = '$vida', pocion = '$potions', manzana = '$apples', flechas = '$arrows' WHERE codigo = '1'";
+    $sqlupdate = "UPDATE jugadores SET direccion = '$direccion', posicionx = '$posicionx', posiciony = '$posiciony', vida = '$vida', pocion = '$potions', manzana = '$apples', flechas = '$arrows', llaves = '$llaves' WHERE codigo = '2'";
 
       if (mysqli_query($conn, $sqlupdate))
       {
@@ -43,6 +43,7 @@
   $pociones = filter_input(INPUT_POST, "pociones", FILTER_SANITIZE_STRING);
   $manzanas = filter_input(INPUT_POST, "manzanas", FILTER_SANITIZE_STRING);
   $flechas = filter_input(INPUT_POST, "flechas", FILTER_SANITIZE_STRING);
+  $llaves = filter_input(INPUT_POST, "llaves", FILTER_SANITIZE_STRING);
 
   //$positionX = abs($positionx);
   //$positionY = abs($positiony);
@@ -55,7 +56,7 @@
         alert('Parametros recibidos'); 
       </script>";
 
-    $data = guardado_jugadores_bbdd($vida, $direction, $positionx, $positiony, $pociones, $manzanas, $flechas);
+    $data = guardado_jugadores_bbdd($vida, $direction, $positionx, $positiony, $pociones, $manzanas, $flechas, $llaves);
     echo "<script> 
         alert('$data'); 
       </script>";
