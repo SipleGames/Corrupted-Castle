@@ -385,7 +385,7 @@ class Castillo extends Phaser.Scene {
 
     if (KeyV.isDown)
     {
-      savedatabase();
+      saveDB();
     }
     
     if (KeyW.isDown)
@@ -567,8 +567,9 @@ class Castillo extends Phaser.Scene {
         
         if (numPotions == 0)
         {
-          Casilla1 = false;
-          potionsCasilla.destroy();
+          
+          Casilla2 = false;
+          appleCasilla.destroy();
         }
       }
     }
@@ -593,8 +594,8 @@ class Castillo extends Phaser.Scene {
     {
       if(numLlaves == 0)
       {
-        Casilla3 = false;
-        lLavesCasilla.destroy();
+        Casilla4 = false;
+        llavesCasilla.destroy();
       }
 
       if(Phaser.Inpu.Keyboard.JustDown(Key4))
@@ -782,9 +783,10 @@ function destroyEnemies(a, e)
     potions = potionsList.create(e.x, e.y, 'pocion');
   }
 
-  else if (randomNumero == 2)
+  else if (randomNum == 2)
   {
     llaves = llavesList.create(e.x, e.y, 'keyFragment');
+    llaves.setScale(5);
   }
   
   else if (randomNum == 3)
@@ -848,6 +850,7 @@ function takeKey(pl, ll)
   {
     llavesCasilla = this.add.image(725, 35, 'keyFragment').setScrollFactor(0);
     lLavesCasilla.setScale(2);
+    lLavesCasilla.setDepth(7);
   }
   
   Casilla4 = true;
@@ -884,7 +887,7 @@ function potionEnds()
   player.speed = 200;
 }
 
-function savedatabase()
+function saveDB()
 {
    //Tabla jugador
   var directions = player.direccion;
