@@ -37,7 +37,7 @@ var Casilla1 = false;
 var Casilla2 = false;
 var Casilla3 = false;
 var Casilla4 = false;
-//otros
+//otro
 var exit;
 var chestsObj;
 
