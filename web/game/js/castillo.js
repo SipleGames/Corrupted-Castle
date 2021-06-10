@@ -604,6 +604,7 @@ class Castillo extends Phaser.Scene {
       }
 
       if(Phaser.Input.Keyboard.JustDown(Key4))
+
       {
          player.x = 100;
          player.y = 100;
