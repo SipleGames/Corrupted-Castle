@@ -12,7 +12,7 @@
 
 
     // aqui hace lo necesario para consultar o escribir en la base de datos
-    $sqlupdate = "UPDATE jugadores SET direccion = '$direccion', posicionx = '$posicionx', posiciony = '$posiciony', vida = '$vida', pocion = '$potions', manzana = '$apples', flechas = '$arrows' WHERE codigo = '1'";
+    $sqlupdate = "UPDATE jugadores SET direccion = '$direccion', posicionx = '$posicionx', posiciony = '$posiciony', vida = '$vida', pocion = '$potions', manzana = '$apples', flechas = '$arrows' WHERE codigo = '2'";
 
       if (mysqli_query($conn, $sqlupdate))
       {
