@@ -415,7 +415,7 @@ class Campo extends Phaser.Scene {
 
     if (KeySpace.isDown)
     {
-      if (contadorArrow == 0 && numArrows > 0)
+      if (contadorArrow == 0)
       {
         if (player.direccion == 1)
         {
@@ -434,7 +434,6 @@ class Campo extends Phaser.Scene {
           arrowCreatorDown();
         }
 
-        numArrows = numArrows - 1;
 
         contadorArrow = 1000;
       }
@@ -516,7 +515,7 @@ class Campo extends Phaser.Scene {
       if (numArrows == 0)
       {
           Casilla3 = false;
-          arrowCasilla.destroy();
+          //arrowCasilla.destroy();
       }
       else
       {

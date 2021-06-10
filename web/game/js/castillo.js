@@ -86,9 +86,6 @@ class Castillo extends Phaser.Scene {
 
   create()
   {
-
-
-
     //Inventario
     inventory = this.add.image(690, 30, 'inventory').setScrollFactor(0)
     inventory.setDepth(2);
@@ -481,7 +478,7 @@ class Castillo extends Phaser.Scene {
 
     if (KeySpace.isDown)
     {
-      if (contadorArrow == 0 && numArrows > 0)
+      if (contadorArrow == 0)
       {
         if (player.direccion == 1)
         {
@@ -500,7 +497,7 @@ class Castillo extends Phaser.Scene {
           arrowCreatorDown();
         }
 
-        numArrows= numArrows - 1;
+    
 
         contadorArrow = 1000;
       }
@@ -579,16 +576,16 @@ class Castillo extends Phaser.Scene {
       }
     }
 
-     if (Casilla3)
+    if (Casilla3)
     {
       if (numArrows == 0)
       {
           Casilla3 = false;
-          arrowCasilla.destroy();
+          //arrowCasilla.destroy();
       }
       else
       {
-        arrowCasilla = this.add.image(689, 35, 'arrow').setScrollFactor(0);
+        arrowCasilla= this.add.image(689, 35, 'arrow').setScrollFactor(0);
         arrowCasilla.setScale(0.20, 0.20);
         arrowCasilla.setSize(10, 14);
         arrowCasilla.setDepth(7);
@@ -781,7 +778,7 @@ function destroyEnemys(a, e)
   arrowList.remove(a);
   enemyTauroList.remove(e);
 
-  randomNum = 2//Math.floor(Math.random() * 6) + 1;
+  randomNum = Math.floor(Math.random() * 6) + 1;
 
   if (randomNum == 1)
   {
