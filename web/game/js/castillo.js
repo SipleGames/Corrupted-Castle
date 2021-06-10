@@ -906,6 +906,7 @@ function saveDB()
   var flechas = numArrows;
   var llaves = numLlaves;
 
+
   var urlllamada = 'http://localhost/CorruptedCastle/web/php/index.php';
 
   xhr = new XMLHttpRequest();
