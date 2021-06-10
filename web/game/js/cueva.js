@@ -1,36 +1,37 @@
 //nombre para colocar portal->Portal
 var player;
 var tauro;
+var vol;
 var portal;
 var contadorArrow = 0;
-var heartText;
-var maxHearts = 3;
+var vidas;
+var maxHearts;
 var x;
 var y;
+var i;
+var eventoBola;
 var playermuerto = false;
-
-var KeyA;
-var KeyO;
-var KeyW;
-var KeyS;
-var KeySpace;
-var KeyD;
-var KeyV;
-var KeyP;
-var KeyV;
+var bossmuerto = false;
+var KeyA, KeyO, KeyW, KeyS, KeySpace, KeyD, KeyV, KeyP, KeyV;
 var KeyL, Key1, Key2, Key3, Key4, Key5;
+var circuloBoss, circuloEnemigo;
 var arrowList;
-var enemyTauroList;
+var bolasList, bolasEnergia;
+var emyMovLi, enemyTauroList;
+var text;
 var casilla1 = false;
 var casilla2 = false;
 var casilla3 = false;
 var casilla4 = false;
 var casilla5 = false;
 var inventory;
-var potionCasilla;
-var pocion;
-var potion;
-var apple;
+var volHealth = 40;
+var potionsList, potionCasilla, collectArrowList;
+var numPotions = 0;
+var numApples = 0;
+var numArrows = 0;
+var randomX, randomY;
+var appleList;
 var Portal;
 var tauros;
 
@@ -53,6 +54,12 @@ preload() {
 
   //Enemigo
     this.load.spritesheet('enemyTauro', 'game/assets/enemies/tauro.png', {frameWidth: 50, frameHeight: 72});
+    this.load.image('boss', 'game/assets/enemies/boss1.png');
+    this.load.spritesheet('deathParticlesBlue', 'game/assets/particulas/deathParticlesBlue.png', {frameWidth: 128, frameHeight: 128});
+
+
+  //Disparoboss
+    this.load.image('bolaenergia', 'game/assets/enemies/bola.png');
 
   //Mapa
     this.load.tilemapTiledJSON('map', 'game/assets/mapa/cueva.json');
@@ -66,6 +73,7 @@ preload() {
   //Inventario
     this.load.image('pocion', 'game/assets/inventario/pocion.png');
     this.load.image('manzana', 'game/assets/inventario/manzana.png');
+    this.load.image('arrow', 'game/assets/inventario/left.png');
     this.load.image('inventory', 'game/assets/inventario/inventario.png');
 
   //Corazones
@@ -81,12 +89,15 @@ create() {
 
   const Techo = map.createLayer("Techo", tileset, 0, 0);
   const Agujero = map.createLayer("Agujero", tileset, 0, 0);
+  const Piedras = map.createLayer("Piedras", tileset, 0, 0);
   const Mundo = map.createLayer("World", tileset, 0, 0);
   const Below = map.createLayer("Suelo", tileset, 0, 0);
   Below.setDepth(-1);
+  Techo.setDepth(1);
   Mundo.setCollisionByProperty({ collides: true });
   Techo.setCollisionByProperty({ collides: true });
   Agujero.setCollisionByProperty({ collides: true });
+  Piedras.setCollisionByProperty({ collides: true });
   this.physics.world.setBounds(0, 0, 1600, 1600); 
   
 
@@ -95,7 +106,7 @@ create() {
   const spawnPoint = map.findObject("Objects", obj => obj.name === "Spawn Cueva");
 
   player = this.physics.add.sprite(spawnPoint.x, spawnPoint.y, 'hero');
-	player.setSize(10,14);
+  player.setSize(10,14);
   player.setScale(1.2)
   player.speed = 175;
   player.speedRoll = 400;
@@ -108,19 +119,27 @@ create() {
     portalCampo.setDepth(-1);
 
 //Enemy
-  tauros = this.physics.add.group()
-  for (var i = 0; i < 9; i++)
+  enemyTauroList = this.physics.add.group()
+  for (var i = 0; i < 15; i++)
     {
-    /*Phaser.Math.Between(0, Mundo.width), Phaser.Math.Between(0, Mundo.height)*/
-      tauro = tauros.create(200, 200, 'Tauro2');
-      tauro.setScale(0.6,0.6);
-      tauro.velocidad = 60;  
-      tauro.patrolCircle = new Phaser.Geom.Circle(0, 0, 256);
+      randomX = Phaser.Math.Between(0, 3128);
+      randomY = Phaser.Math.Between(0, 3157);
+      tauro = enemyTauroList.create(randomX, randomY, 'Tauro2');
+      tauro.setScale(0.6);
+      tauro.velocidad = 100;  
+      circuloEnemigo = new Phaser.Geom.Circle(tauro.x, tauro.y, 256);
       tauro.direccion = -1;
     }
+  //Boss
+  vol = this.physics.add.sprite(900, 1500, 'boss').setScale(0.15).setSize(600,600)
+  circuloBoss = new Phaser.Geom.Circle(vol.x, vol.y, 400);
 
   //Grupos
-  var arrowList = this.physics.add.group(); 
+  arrowList = this.physics.add.group(); 
+  bolasList = this.physics.add.group();
+  potionsList = this.physics.add.group();
+  appleList = this.physics.add.group();
+  collectArrowList = this.physics.add.group();
   player.setCollideWorldBounds(true);
   
   /*debugGraphics = this.add.graphics().setAlpha(0.7);
@@ -132,30 +151,34 @@ create() {
 
   //Inventario 
   inventory = this.add.image(690, 30, 'inventory').setScrollFactor(0);
-  potion = this.physics.add.sprite(300, 200, 'pocion');
-  apple = this.physics.add.sprite(340, 150, 'manzana');
 
-  //Colision
-  this.physics.add.collider(tauro, Mundo, cambiar, null, this);
+  //Colision mundo
+  this.physics.add.collider(enemyTauroList, Mundo, cambiar, null, this);
   this.physics.add.collider(arrowList, Mundo);
+  this.physics.add.collider(arrowList, Techo);
+  this.physics.add.collider(arrowList, Piedras);
   this.physics.add.collider(Mundo, player);
-  this.physics.add.overlap(player, tauro, shake, null, this);
-  this.physics.add.overlap(arrowList, tauros, enemyDie, null, this);
-
-  this.physics.add.overlap(player, potion, llevarinv, null, this);
-    this.physics.add.overlap(player, apple, llevarinv, null, this)
+  this.physics.add.collider(Techo, player);
+  this.physics.add.collider(Piedras, player);
+  this.physics.add.collider(Agujero, player, playerdie, null, this);
+  this.physics.add.collider(Techo, enemyTauroList);
+  this.physics.add.collider(Piedras, enemyTauroList);
+  this.physics.add.collider(Mundo, vol);
+  this.physics.add.collider(Techo, vol);
   this.physics.add.overlap(portalCampo, player, changeCampo, null, this);
-  
-  
-  
+
+//colision
+  this.physics.add.overlap(arrowList, vol, destroyBoss, null, this);
+  this.physics.add.overlap(player, enemyTauroList, shake, null, this);
+  this.physics.add.overlap(player, bolasList, playerdie, null, this);
+  this.physics.add.overlap(arrowList, enemyTauroList, destroyEnemy, null, this);
+  this.physics.add.overlap(player, potionsList, takePotion, null, this);
+  this.physics.add.overlap(player, appleList, takeApple, null, this);
+  this.physics.add.overlap(player, collectArrowList, takeArrow, null, this);
 
   //CAMARA
 	this.cameras.main.setBounds(0, 0, 3200, 3200);
   this.cameras.main.startFollow(player);
-
-
-  
-
   //CORAZONES
   const hearts = this.add.group({
     classType: Phaser.GameObjects.Image
@@ -169,10 +192,12 @@ create() {
     },
     quantity: 3
   })
-
-  
-   heartText = this.add.text(16, 16, 'Hearts: '+ maxHearts, { fontSize: '16px', fill: '#ffc0cb' }).setScrollFactor(0);
-
+  this.text = this.add.text(32, 32).setScrollFactor(0).setFontSize(16).setColor('#ffffff');
+    text = this.add.text(750, 32);
+    maxHearts = 3;
+    volHealth = 40;
+    randomX;
+    randomY;
 
   //MOVIMIENTO
     KeyW = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
@@ -309,6 +334,12 @@ create() {
       frameRate: 10,
       repeat: -1
     });
+
+  //particulas
+  this.anims.create({
+    key: "enemyParticlesBlue",
+    frames: this.anims.generateFrameNumbers('deathParticlesBlue', {start: 0, end: 14}),
+  });
   
    
 
@@ -316,21 +347,46 @@ create() {
 
 update(time, delta) {
 
-  for(var i = 0; i < 9; i++)
-  { 
-    tauro.body.setVelocityX(tauro.direccion * tauro.velocidad);
- 
-    tauro.patrolCircle.x = player.x;
-    tauro.patrolCircle.y = player.y;
 
-    if(tauro.patrolCircle.contains(player.x, player.y)){
+for (i = 0; i < enemyTauroList.getChildren().length; i++)
+  {
+    emyMovLi = enemyTauroList.getChildren()[i];
+
+    if(circuloEnemigo.contains(player.x, player.y)){
+      this.physics.moveTo(emyMovLi, player.x, player.y, tauro.velocidad, 10);
+    
       if (player.x < tauro.x && tauro.body.setVelocityX >= 0) 
         tauro.body.setVelocityX = -150;
+        
     }
     else if (player.x > tauro.x && tauro.body.setVelocityX <= 0) {
         tauro.body.setvelocityX = 150;
     }
+  
+  }
 
+  /*for(var i = 0; i < 9; i++)
+  { 
+    tauro.body.setVelocityX(tauro.direccion * tauro.velocidad); 
+
+    if(circuloEnemigo.contains(player.x, player.y)){
+      this.physics.moveTo(tauro, player.x, player.y);
+    
+      if (player.x < tauro.x && tauro.body.setVelocityX >= 0) 
+        tauro.body.setVelocityX = -150;
+        
+    }
+    else if (player.x > tauro.x && tauro.body.setVelocityX <= 0) {
+        tauro.body.setvelocityX = 150;
+    }
+  }*/
+
+  if(circuloBoss.contains(player.x, player.y) && !bossmuerto)
+  {
+      this.physics.moveTo(vol, player.x, player.y);
+      bossDispara();
+      this.physics.moveTo(bolasEnergia, player.x, player.y);
+      
   }
 
 
@@ -461,15 +517,33 @@ update(time, delta) {
       casilla1 = false;
     }   
   }
+  if (casilla2)
+    {
+      if (Phaser.Input.Keyboard.JustDown(Key2))
+      {
+        if (maxHearts != 3 && numApples > 0)
+        {
+          maxHearts = maxHearts + 1;
 
-  if(KeyL.isDown && casilla1 || casilla2 || casilla3 || casilla4 || casilla5)
-  {
-    potionCasilla.destroy();
-    potion = this.physics.add.sprite(player.x, player.y, 'pocion');
-    
-    this.physics.add.overlap(player, potion, llevarinv, null, this);
-    casilla1 = false;
-  }
+          numApples = numApples - 1;
+        }
+        
+        if (numApples == 0)
+        {
+          casilla2 = false;
+          appleCasilla.destroy();
+        }
+      }
+    }
+
+    this.text.setText([
+      'vidas: ' + maxHearts,
+      'VidaBoss: ' + volHealth,
+      'playerX: ' + player.x,
+      'playerY: ' + player.y,
+      'pociones: ' + numPotions,
+      'apples: ' + numApples
+    ]);
 
 }
 }
@@ -529,25 +603,25 @@ function idleRight()
 function rollUpMovement()
 {
 	player.anims.play('rollUp', true);
-  player.setVelocityY(-player.speedRoll);
+  player.setVelocityY(-player.speed);
 }
 
 function rollLeftMovement()
 {
 	player.anims.play('rollLeft', true);
-  player.setVelocityX(-player.speedRoll);
+  player.setVelocityX(-player.speed);
 }
 
 function rollRightMovement()
 {
 	player.anims.play('rollRight', true);
-  player.setVelocityX(player.speedRoll);
+  player.setVelocityX(player.speed);
 }
 
 function rollDownMovement()
 {
 	player.anims.play('rollDown', true);
-  player.setVelocityY(player.speedRoll);
+  player.setVelocityY(player.speed);
 }
 
 function atackDown()
@@ -575,7 +649,44 @@ function destroyEnemy(a, e)
   a.disableBody(true, true);
   e.disableBody(true, true);
   arrowList.remove(a);
-  tauros.remove(e);
+  enemyTauroList.remove(e);
+
+  randomNum = Math.floor(Math.random() * 6) + 1;
+
+  if (randomNum == 1)
+  {
+    potions = potionsList.create(e.x, e.y, 'pocion');
+  }
+  else if (randomNum == 3)
+  {
+    apple = appleList.create(e.x, e.y, 'manzana');
+  }
+  else if (randomNum == 5)
+  {
+    collectArrow = collectArrowList.create(e.x, e.y, 'arrow');
+    collectArrow.setScale(0.10, 0.10);
+  }
+
+  particlesDeath = this.add.sprite(e.x, e.y, 'deathParticlesBlue');
+  particlesDeath.play('enemyParticlesBlue');
+}
+
+function destroyBoss(a, v)
+{
+  
+  a.disableBody(true, true);
+  arrowList.remove(a);
+  volHealth = volHealth - 1;
+   if(volHealth = 0)
+   {
+    vol.destroy(v)
+    particlesDeath = this.add.sprite(v.x, v.y, 'deathParticlesBlue');
+    particlesDeath.play('enemyParticlesBlue');
+    bossmuerto = true;
+   }
+
+
+  
 }
 
 function shake(){
@@ -591,27 +702,17 @@ function shake(){
     },
     quantity: 2
   })
-    
-  player.hearts -=1;
-  heartText.text = 'Hearts: ' + player.hearts;
-  if(player.hearts <= 0)
-  {
-    playerdie();
-  }
 
+  maxHearts = maxHearts - 1;
+    
 }
 
 function playerdie()
 {
-   player.disableBody(true, true);
-    playermuerto = true;
+  player.disableBody(true, true);
+  playermuerto = true;
 }
 
-function enemyDie()
-{
-  tauro.disableBody(true, true);
-
-}
 
 function arrowCreatorLeft()
 {
@@ -671,33 +772,91 @@ function arrowCreatorDown()
    arrow.setVelocityY(arrow.speed);
   }
 }
-
-
-function caeragujero()
-{
-  playerdie();
-}
-
 function cambiar()
 {
   if(tauro.direccion = 1){tauro.direccion = 1}
   else{tauro.direccion = -1}
   
 }
+function spawn(t){
+  if (this.physics.add.collider(enemyTauroList, Techo) || this.physics.add.collider(enemyTauroList, Mundo)) 
+  {
+    enemyTauroList.remove(t);
+    enemyTauroList.create(randomX, randomY, 'Tauro2');
+  }
 
-function llevarinv()
+}
+
+function acaboboost(){player.speed = 175;}
+
+function bossDispara(){
+   for (i = 0; i < 1; i++)
+  {
+    bolasEnergia = bolasList.create(vol.x, vol.y, 'bolaenergia').setScale(0.05).setSize(100,100);
+    bolasEnergia.setVelocity(bolasEnergia.speed);
+    bolasEnergia.speed = 200;
+  }
+  
+    
+
+    
+}
+
+function boladesaparece(b){
+  b.disableBody(true, true);
+  bolasList.remove(b);
+
+  
+}
+
+function takePotion(pl, po)
 {
-	potion.destroy();
-	potionCasilla = this.add.image(618, 35, 'pocion').setScrollFactor(0);
-	potionCasilla.setScale(2);
+  po.disableBody(true, true);
+  potionsList.remove(po);
+
+  numPotions = numPotions + 1;
+
+  if (numPotions == 1)
+  {
+    potionCasilla = this.add.image(618, 35, 'pocion').setScrollFactor(0);
+    potionCasilla.setScale(2);
+  }
+  
   casilla1 = true;
 }
 
-function acaboboost()
+function takeApple(pl, ap)
 {
-  player.speed = 175;
+  ap.disableBody(true, true);
+  appleList.remove(ap);
+
+  numApples = numApples + 1;
+
+  if (numApples == 1)
+  {
+    appleCasilla = this.add.image(654, 35, 'manzana').setScrollFactor(0);
+    appleCasilla.setScale(2);
+  }
+  
+  casilla2 = true;
 }
 
+function takeArrow(pl, ar)
+{
+  ar.disableBody(true, true);
+  collectArrowList.remove(ar);
+
+  numArrows = numArrows + 1;
+
+  if (numArrows)
+  {
+    arrowCasilla = this.add.image(689, 35, 'arrow').setScrollFactor(0);
+    arrowCasilla.setScale(0.20, 0.20);
+    arrowCasilla.setSize(10, 14);
+  }
+
+  casilla3 = true;
+}
 function changeCampo()
 {
   window.location.assign("http://localhost/CorruptedCastle/web/game.html");
@@ -711,6 +870,9 @@ function savedatabase()
   var vida = maxHearts;
   var positionx = player.x;
   var positiony = player.y
+  var manzanas = numApples;
+  var pociones = numPotions;
+  var flechas = numArrows;
 
   var urlllamada = 'http://localhost/CorruptedCastle/web/php/index.php';
 
@@ -730,7 +892,7 @@ function savedatabase()
     }
   }
   // Envia datos al servidor php
-  datos = 'directions=' + directions + '&vida=' + vida + '&positionx=' + positionx + '&positiony=' + positiony;
+  datos = 'directions=' + directions + '&vida=' + vida + '&positionx=' + positionx + '&positiony=' + positiony + '&manzanas=' + manzanas + '&pociones=' + pociones + '&flechas=' + flechas;
   // Debug
   console.log(datos);
   xhr.send(datos); 
