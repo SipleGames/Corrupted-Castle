@@ -30,6 +30,7 @@ var vidas;
 var numPotions = 0;
 var numApples = 0;
 var numArrows = 8;
+var numLlaves;
 var enemyTauro;
 var arrowCasilla;
 
@@ -823,6 +824,7 @@ function savedatabases()
   var pociones = numPotions;
   var manzanas = numApples;
   var flechas = numArrows;
+  var llaves = numLlaves;
 
   var urlllamada = 'http://localhost/CorruptedCastle/web/php/index.php';
 
@@ -842,7 +844,7 @@ function savedatabases()
     }
   }
   // Envia datos al servidor php
-  datos = 'directions=' + directions + '&vida=' + vida + '&positionx=' + positionx + '&positiony=' + positiony + '&pociones=' + numPotions + '&manzanas=' + numApples + '&flechas=' + numArrows;
+  datos = 'directions=' + directions + '&vida=' + vida + '&positionx=' + positionx + '&positiony=' + positiony + '&pociones=' + numPotions + '&manzanas=' + numApples + '&flechas=' + numArrows + '&llaves=' + numLlaves;
   // Debug
   console.log(datos);
   xhr.send(datos); 
